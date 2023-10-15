@@ -7,8 +7,9 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
     <title>Document</title>
-</head>
+</head> 
 <body>
+ 
 <div class="container">
     <h1 id="companyname">Company Name</h1>
     <div class="row">
@@ -24,17 +25,43 @@
               </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row mt-3">
+      <div class="col-12">
+          <div class="card">
+              <div class="card-body">
+                  <h5 class="card-title">Employee Stats</h5>
+                  <table class="table table-bordered">
+                      <thead>
+                          <tr>
+                          <th scope="col">Total Employees</th>
+                          <th scope="col">Male/Female</th>
+                          <th scope="col">% Live in US</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                          <td id="totalEmployees">50</td>
+                          <td id="maleToFemaleRatio">100/100</td>
+                          <td id="percLiveInUS">50%</td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+      </div>
+  </div>
+ <div class="row">
         <div class="col-12">
 
         </div>
     </div>
     <div class="row">
         <div class="col-12">
+          <a href="pages/employee/employee.html">
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row g-0">
                   <div class="col-md-5">
-                    <img id="eomPicture" src="..." class="img-fluid rounded-start" alt="..." height="100%" width="100%">
+                    <img id="eomPicture" src="https://1drv.ms/i/s!AiiWHzf8Xq36g4t7dgDHJg0gJHGlSQ?e=g0IeTb" class="img-fluid rounded-start" alt="image" height="100%" width="100%">
                   </div>
                   <div class="col-md-7">
                     <div class="card-body">
@@ -57,6 +84,7 @@
                   </div>
                 </div>
               </div>
+            </a>
         </div>
     </div>
 </div>

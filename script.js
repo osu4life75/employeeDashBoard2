@@ -21,6 +21,9 @@ function getAllEmployees() {
         console.log("randomEmployeeIndex",randomEmployeeIndex);
        let randomeEmployee2 = data[randomEmployeeIndex];
         getEmployeeofTheMonth(randomeEmployee2);
+        totalEmployees(data);
+        maleToFemaleRatio(data);
+        percLiveInUS(data);
 
       })
       .catch(function(error){
@@ -95,6 +98,54 @@ function getEmployeeofTheMonth(randomEmployee) {
   let eomPictures = document.getElementById("eomPicture");
   eomPictures.src = `${randomEmployee.picture.large}`;
 
+}
+
+function totalEmployees(allEmployees) {
+  const totalNumberOFEmployees = allEmployees.length;
+  let totalEmployees=document.getElementById('totalEmployees');
+  totalEmployees.innerText = `${allEmployees.length}`;
+  console.log('total employees',totalNumberOFEmployees);
+}
+
+function maleToFemaleRatio(allEmployees) {
+ //loop through allEmployees it's an array
+ // for loop for ever iteration you will find a gender
+ //need two variables male and female count
  
+  let femaleCount = 0;
+  let maleCount = 0;
+  for (let i = 0; i < allEmployees.length; i++) {
+    const element = allEmployees[i];
+    console.log('element', element);
+    if (element.gender === 'male') {
+      maleCount = maleCount + 1;
+    }else{
+      femaleCount = femaleCount + 1;
+    }
+  }
+  console.log('totalFemandMale',femaleCount, maleCount);
+  let ratio = document.getElementById('maleToFemaleRatio');
+  ratio.innerText = maleCount + " /" + femaleCount;
+  
+}
+function percLiveInUS(allEmployees) {
+ //total employess 23 how many live in US?
+ //divide total US employess by allEmployees * by 100
+  
+  let usResident = 0;
+  for (let i = 0; i < allEmployees.length; i++) {
+    const element = allEmployees[i];
+    if(element.location.country === 'United States'){
+      usResident = usResident +1;
+    
+    }
+  
+  } 
+  console.log('us residents', usResident);
+  let percentage = ((usResident/allEmployees.length) * 100).toFixed(2); 
+  console.log('percentage', percentage);
+ // let percentageElement = document.getElementById('percLiveInUS');
+ // percentageElement.innerText = percentage + '%'; 
+  document.getElementById('percLiveInUS').innerText = percentage + '%';
 }
 
