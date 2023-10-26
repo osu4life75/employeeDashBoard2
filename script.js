@@ -1,7 +1,9 @@
+// import {getAge} from './util/util';
+
 window.onload = function () {
     console.log('Window has finished loading.');
     getAllEmployees()
-    getCompanyInfo()
+    // getCompanyInfo()
     
 };
 
@@ -15,15 +17,16 @@ function getAllEmployees() {
         throw new Error('Network response was not ok.');
       })
       .then(function(data){
-        console.log(data);
+        console.log('data',data);
+        let employeesArray = data.employees;
         // get random number for employee of the month
-        let randomEmployeeIndex = Math.floor(Math.random() * (data.length));
+       let randomEmployeeIndex = Math.floor(Math.random() * (employeesArray.length));
         console.log("randomEmployeeIndex",randomEmployeeIndex);
-       let randomeEmployee2 = data[randomEmployeeIndex];
+       let randomeEmployee2 = employeesArray[randomEmployeeIndex];
         getEmployeeofTheMonth(randomeEmployee2);
-        totalEmployees(data);
-        maleToFemaleRatio(data);
-        percLiveInUS(data);
+        totalEmployees(employeesArray);
+        maleToFemaleRatio(employeesArray);
+        percLiveInUS(employeesArray);
 
       })
       .catch(function(error){
@@ -32,71 +35,86 @@ function getAllEmployees() {
     
     
 };
-function getCompanyInfo() {
-    fetch("http://localhost:3000/getCompanyInfo")
-    .then(function(response){
-        if(response.ok){
-            return response.json();
-        }
-        throw new Error('Network response was not ok.');
-      })
-      .then(function(data){
-        console.log(data);
-        const name = data.name;
-        console.log(name)
-        let companyNameElement = document.querySelector('#companyname')
-        companyNameElement.innerText = name;
-        let businessCategory = document.getElementById("businessCategory")
-        businessCategory.innerText = data.businessCategory;
-        let businessAdress = document.getElementById("businessAdress")
-        businessAdress.innerText = `${data.address} ${data.city} ${data.state}, ${data.country}`;
-        
-
-
-
-
-
-
-      })
-      .catch(function(error){
-        console.log(error);
-      })
+// function getCompanyInfo() {
+//     fetch("http://localhost:3000/getCompanyInfo")
+//     .then(function(response){
+//         if(response.ok){
+//             return response.json();
+//         }
+//         throw new Error('Network response was not ok.');
+//       })
+//       .then(function(data){
+//         console.log(data);
+//         const name = data.name;
+//         console.log(name)
+//         let companyNameElement = document.querySelector('#companyname')
+//         companyNameElement.innerText = name;
+//         let businessCategory = document.getElementById("businessCategory")
+//         businessCategory.innerText = data.businessCategory;
+//         let businessAdress = document.getElementById("businessAdress")
+//         businessAdress.innerText = `${data.address} ${data.city} ${data.state}, ${data.country}`;
+//         })
+//       .catch(function(error){
+//         console.log(error);
+//       })
     
     
-};
-function test(){
-  fetch("http://localhost:3000/test") 
-  .then(function(response){
-    if(response.ok){
-        return response.json();
-    }
-    throw new Error('Network response was not ok.');
-  })
-  .then(function(data){
-    console.log(data);
-  })
-  .catch(function(error){
-    console.log(error);
-  })
+// };
+// function test(){
+//   fetch("http://localhost:3000/test") 
+//   .then(function(response){
+//     if(response.ok){
+//         return response.json();
+//     }
+//     throw new Error('Network response was not ok.');
+//   })
+//   .then(function(data){
+//     console.log(data);
+//   })
+//   .catch(function(error){
+//     console.log(error);
+//   })
 
-};
+// };
+
+function getAge(dob){
+  console.log('dob',dob);
+  let dateOfBirth = new Date(dob);
+  let currentDate = new Date();
+  let age = currentDate.getFullYear() - dateOfBirth.getFullYear();
+
+  // Check if the birthday has occurred this year
+  if (
+    currentDate.getMonth() < dateOfBirth.getMonth() ||
+    (currentDate.getMonth() === dateOfBirth.getMonth() &&
+      currentDate.getDate() < dateOfBirth.getDate())
+  ) {
+    // Subtract 1 from age if the birthday hasn't occurred yet this year
+    return age - 1;
+  }
+
+  return age;
+
+ }
 
 function getEmployeeofTheMonth(randomEmployee) {
   console.log('EOM', randomEmployee);
   let employeeName = document.getElementById('employeeName');
-  employeeName.innerText = `${randomEmployee.name.first} ${randomEmployee.name.last}`;
+  employeeName.innerText = `${randomEmployee.FirstName} ${randomEmployee.LastName}`;
   let employeeAge = document.getElementById('employeeAge')
-  employeeAge.innerText = `${randomEmployee.dob.age}`;
+  let age = getAge(randomEmployee.DOB)
+  console.log('age',age);
+  employeeAge.innerText = `${age}`;
   let employeeGender = document.getElementById('employeeGender')
-  employeeGender.innerText = `${randomEmployee.gender.charAt(0).toUpperCase()}${randomEmployee.gender.slice(1)}`;
+  employeeGender.innerText = `${randomEmployee.Gender}`;
   let employeeEmail = document.getElementById('employeeEmail')
-  employeeEmail.innerText = `${randomEmployee.email}`;
+  employeeEmail.innerText = `${randomEmployee.Email}`;
   let employeeCity = document.getElementById('employeeCity')
-  employeeCity.innerText = `${randomEmployee.location.city}`;
+  employeeCity.innerText = `${randomEmployee.City}`;
   let employeeCountry = document.getElementById('employeeCountry')
-  employeeCountry.innerText = `${randomEmployee.location.country}`;
+  employeeCountry.innerText = `${randomEmployee.Country}`;
   let eomPictures = document.getElementById("eomPicture");
-  eomPictures.src = `${randomEmployee.picture.large}`;
+  eomPictures.src = `${randomEmployee.Picture}`;
 
 }
 
@@ -134,7 +152,7 @@ function percLiveInUS(allEmployees) {
   
   let usResident = 0;
   for (let i = 0; i < allEmployees.length; i++) {
-    const element = allEmployees[i];
+    const element = employee[i];
     if(element.location.country === 'United States'){
       usResident = usResident +1;
     
