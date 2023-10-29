@@ -1,4 +1,8 @@
-// import {getAge} from './util/util';
+// main.js
+// import getAge from './util/util.js';
+// Your main code
+
+
 
 window.onload = function () {
     console.log('Window has finished loading.');
@@ -129,13 +133,13 @@ function maleToFemaleRatio(allEmployees) {
  //loop through allEmployees it's an array
  // for loop for ever iteration you will find a gender
  //need two variables male and female count
- 
+ console.log('allEmployees', allEmployees[0].Gender);
   let femaleCount = 0;
   let maleCount = 0;
   for (let i = 0; i < allEmployees.length; i++) {
     const element = allEmployees[i];
     console.log('element', element);
-    if (element.gender === 'male') {
+    if (element.Gender === 'Male') {
       maleCount = maleCount + 1;
     }else{
       femaleCount = femaleCount + 1;
@@ -152,15 +156,15 @@ function percLiveInUS(allEmployees) {
   
   let usResident = 0;
   for (let i = 0; i < allEmployees.length; i++) {
-    const element = employee[i];
-    if(element.location.country === 'United States'){
+    const element = allEmployees[i];
+    if(element.Country === 'USA'){
       usResident = usResident +1;
     
     }
   
   } 
-  console.log('us residents', usResident);
-  let percentage = ((usResident/allEmployees.length) * 100).toFixed(2); 
+  console.log('usResidents', usResident);
+  let percentage = ((usResident/allEmployees.length) * 100).toFixed(0); 
   console.log('percentage', percentage);
  // let percentageElement = document.getElementById('percLiveInUS');
  // percentageElement.innerText = percentage + '%'; 

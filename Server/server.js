@@ -2,6 +2,8 @@ import express from 'express';
 //import multer from 'multer';
 import cors from 'cors';
 import mysql from 'mysql2/promise';
+import {config} from 'dotenv'
+config()
 
 //Middleware 
 const app = express(); 
@@ -12,9 +14,9 @@ app.use(cors());
 //Database//
 const pool = mysql.createPool({
     host:'127.0.0.1',
-    user: 'root',
-    password: 'JandG093020!!!',
-    database: 'employeedashboard'
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE
 })
 /*const result= await pool.query('select * from employee');
 console.log('result',result);
