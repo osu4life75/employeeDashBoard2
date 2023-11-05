@@ -6,4 +6,5 @@ const getAge = (dob) => {
     console.log('dob',dob);
     return age;
 }
-export default getAge;
+
+module.exports= getAge;

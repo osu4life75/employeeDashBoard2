@@ -7,7 +7,7 @@
 window.onload = function () {
     console.log('Window has finished loading.');
     getAllEmployees()
-    // getCompanyInfo()
+    getCompanyInfo()
     
 };
 
@@ -39,47 +39,49 @@ function getAllEmployees() {
     
     
 };
-// function getCompanyInfo() {
-//     fetch("http://localhost:3000/getCompanyInfo")
-//     .then(function(response){
-//         if(response.ok){
-//             return response.json();
-//         }
-//         throw new Error('Network response was not ok.');
-//       })
-//       .then(function(data){
-//         console.log(data);
-//         const name = data.name;
-//         console.log(name)
-//         let companyNameElement = document.querySelector('#companyname')
-//         companyNameElement.innerText = name;
-//         let businessCategory = document.getElementById("businessCategory")
-//         businessCategory.innerText = data.businessCategory;
-//         let businessAdress = document.getElementById("businessAdress")
-//         businessAdress.innerText = `${data.address} ${data.city} ${data.state}, ${data.country}`;
-//         })
-//       .catch(function(error){
-//         console.log(error);
-//       })
+function getCompanyInfo() {
+    fetch("http://localhost:3000/getCompanyInfo")
+    .then(function(response){
+        if(response.ok){
+            return response.json();
+        }
+        throw new Error('Network response was not ok.');
+      })
+      .then(function(data){
+        console.log('compyInfo Data',data.companyInfo);
+        let companyInfoArray = data.companyInfo;
+        console.log('companyInfoArray',companyInfoArray)
+        const name = companyInfoArray[0].name;
+        console.log(name)
+        let companyNameElement = document.querySelector('#companyname')
+        companyNameElement.innerText = name;
+        let businessCategory = document.getElementById("businessCategory")
+        businessCategory.innerText = companyInfoArray[0].businessCategory;
+        let businessAdress = document.getElementById("businessAdress")
+        businessAdress.innerText = `${companyInfoArray[0].address} ${companyInfoArray[0].city} ${companyInfoArray[0].state}, ${companyInfoArray[0].country}`;
+        })
+      .catch(function(error){
+        console.log(error);
+      })
     
     
-// };
-// function test(){
-//   fetch("http://localhost:3000/test") 
-//   .then(function(response){
-//     if(response.ok){
-//         return response.json();
-//     }
-//     throw new Error('Network response was not ok.');
-//   })
-//   .then(function(data){
-//     console.log(data);
-//   })
-//   .catch(function(error){
-//     console.log(error);
-//   })
+};
+function test(){
+  fetch("http://localhost:3000/test") 
+  .then(function(response){
+    if(response.ok){
+        return response.json();
+    }
+    throw new Error('Network response was not ok.');
+  })
+  .then(function(data){
+    console.log(data);
+  })
+  .catch(function(error){
+    console.log(error);
+  })
 
-// };
+};
 
 function getAge(dob){
   console.log('dob',dob);

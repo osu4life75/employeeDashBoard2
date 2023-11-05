@@ -31,16 +31,18 @@ app.get('/test', (req, res) => {
  app.get('/getAllEmployees', async (req, res) => {
         const result = await pool.query("select * from employee");
         const rows = result[0];
-        console.log('rows',rows);
+        console.log('employeeRows',rows);
         res.json({employees: rows})
         
      
 });
  
-// app.get('/getCompanyInfo', (req, res) => {
-//     console.log(companyInfo)
-//     res.send(companyInfo);
-// });  
+app.get('/getCompanyInfo', async (req, res) => {
+  const result= await pool.query('select * from companyInfo');
+  const rows = result[0];
+    console.log('companyInfo Rows',rows);
+    res.json({companyInfo: rows});
+});  
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
