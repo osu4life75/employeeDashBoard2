@@ -82,6 +82,50 @@
             </a>
         </div>
     </div>
+    <button class="btn btn-primary" id='modalButton'>Add Employee</button>
+</div>
+<div id="addEmployeeModal" class="modal">
+  <div class="modal-content">
+    
+    <h2>Add Employee<span class="close" id="closeModalButton">&times;</span></h2>
+   <!-- Start of the form -->
+   <form id="employeeForm" action="script.js" method="post">
+    <div class="mb-3">
+      <label for="FirstName" class="form-label">First Name</label>
+      <input type="text" class="form-control" id="employeeFirstName" placeholder="First Name" required>
+    </div>
+    <div class="mb-3">
+      <label for="LastName" class="form-label">Last Name</label>
+      <input type="text" class="form-control" id="employeeLastName" placeholder="Last Name" required>
+    </div>
+    <!-- to do add drop down -->
+    <div class="mb-3">
+      <label for="employeeGenderInput" class="form-label">Employee Gender</label>
+      <input type="text" class="form-control" id="employeeGenderInput" placeholder="Enter employee gender" required>
+    </div>
+    <div class="mb-3">
+      <label for="employeeEmailInput" class="form-label">Employee Email</label>
+      <input type="email" class="form-control" id="employeeEmailInput" placeholder="Enter employee email" required>
+    </div>
+    <div class="mb-3">
+      <label for="employeeCityInput" class="form-label">Employee City</label>
+      <input type="text" class="form-control" id="employeeCityInput" placeholder="Enter employee city" required>
+    </div>
+    <div class="mb-3">
+      <label for="employeeCountryInput" class="form-label">Employee Country</label>
+      <input type="text" class="form-control" id="employeeCountryInput" placeholder="Enter employee country" required>
+    </div>
+    <div class="mb-3">
+      <label for="DOB" class="form-label">Date of Birth</label>
+      <input type="date" class="form-control" id="employeeDOBInput" placeholder="Enter employee DOB" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <!-- End of the form -->
+</div>
+</div>
+
+  </div>
 </div>
 
 

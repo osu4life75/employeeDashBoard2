@@ -10,6 +10,12 @@ const app = express();
 // Enable CORS
 app.use(cors());
 
+// Middleware to parse JSON in the request body
+app.use(express.json());
+// Middleware to parse URL-encoded data in the request body
+app.use(express.urlencoded({ extended: true }));
+
+
 
 //Database//
 const pool = mysql.createPool({
@@ -42,8 +48,36 @@ app.get('/getCompanyInfo', async (req, res) => {
   const rows = result[0];
     console.log('companyInfo Rows',rows);
     res.json({companyInfo: rows});
-});  
+}); 
+
+app.post('/addEmployee', async (req, res) => {
+  console.log('req', req.body);
+
+  // Create a new variable for the employee object
+  let employeeObject = req.body;
+
+  // Perform any data manipulations here if needed
+
+  // Write query to insert a new row in the table
+  let databaseTableName = 'employeedashboard';
+
+  try {
+    // Execute the query and wait for the result
+    const result = await pool.query(`INSERT INTO ${databaseTableName} SET ?`, employeeObject);
+
+    // Send a success response to the client
+    res.json({ success: true, message: 'Data inserted successfully' });
+  } catch (err) {
+    // Handle errors and send an error response to the client
+    console.error('Error inserting data: ', err);
+    res.status(500).json({ success: false, message: 'Error inserting data' });
+  }
+});
+
+
+
 const port = 3000;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+

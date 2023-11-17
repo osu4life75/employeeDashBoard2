@@ -1,7 +1,80 @@
 // main.js
 // import getAge from './util/util.js';
 // Your main code
+var modal = document.getElementById('addEmployeeModal');
+var openModalButton = document.getElementById('modalButton');
+var closedModalButton = document.getElementById('closeModalButton');
 
+openModalButton.onclick = function(){
+ modal.style.display = 'block';
+}
+
+closedModalButton.onclick = function() {
+  modal.style.display = 'none';
+}
+
+window.onclick = function(event) {
+  if(event.target==modal){
+     modal.style.display= 'none';
+  }
+}
+
+let newEmployeeForm = document.getElementById('employeeForm');
+newEmployeeForm.addEventListener('submit',function(event){
+  event.preventDefault();
+  let firstName = document.getElementById('employeeFirstName').value; 
+  let lastName = document.getElementById('employeeLastName').value; 
+  let newEmployeeGender = document.getElementById('employeeGenderInput').value; 
+  let newEmployeeEmail = document.getElementById('employeeEmailInput').value; 
+  let newEmployeeCity = document.getElementById('employeeCityInput').value; 
+  let newEmployeeCountry = document.getElementById('employeeCountryInput').value; 
+  let newEmployeeDOB = document.getElementById('employeeDOBInput').value; 
+  
+  // copy above line to add all v;lues of the form
+  // once complete we will place info in object
+  
+  const employeeObject =  {
+      firstName: firstName,
+      lastName: lastName,
+      newEmployeeGender: newEmployeeGender,
+      newEmployeeEmail: newEmployeeEmail,
+      newEmployeeCity: newEmployeeCity,
+      newEmployeeCountry: newEmployeeCountry,
+      newEmployeeDOB: newEmployeeDOB
+  }
+
+  const databaseTableName = 'employeedashboard';
+
+  fetch("http://localhost:3000/addEmployee",{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json', // Set the content type to JSON
+    },
+    body: JSON.stringify(employeeObject), // Convert the data object to JSON string (capitlize JSON in this case)
+  })
+    .then(function(response){
+      if(response.ok){
+          return response.json();
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(function(data){
+      console.log('data',data);
+      
+
+    })
+    .catch(function(error){
+      console.log(error);
+    })
+  
+  
+
+
+  
+  // this is where we will handle form data
+  newEmployeeForm.reset();
+  
+})
 
 
 window.onload = function () {
