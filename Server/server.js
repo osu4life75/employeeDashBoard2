@@ -59,7 +59,7 @@ app.post('/addEmployee', async (req, res) => {
   // Perform any data manipulations here if needed
 
   // Write query to insert a new row in the table
-  let databaseTableName = 'employeedashboard';
+  let databaseTableName = 'employee';
 
   try {
     // Execute the query and wait for the result
