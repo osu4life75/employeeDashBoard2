@@ -56,6 +56,16 @@ app.post('/addEmployee', async (req, res) => {
   // Create a new variable for the employee object
   let employeeObject = req.body;
 
+  const mySqlTableEmployee = {
+    FirstName: req.body.firstName,
+    LastName: req.body.lastName,
+    Gender: req.body.newEmployeeGender,
+    Email: req.body.newEmployeeEmail,
+    City: req.body.newEmployeeCity,
+    Country: req.body.newEmployeeCountry,
+    DOB: req.body.newEmployeeDOB
+  };
+
   // Perform any data manipulations here if needed
 
   // Write query to insert a new row in the table
@@ -63,7 +73,7 @@ app.post('/addEmployee', async (req, res) => {
 
   try {
     // Execute the query and wait for the result
-    const result = await pool.query(`INSERT INTO ${databaseTableName} SET ?`, employeeObject);
+    const result = await pool.query(`INSERT INTO ${databaseTableName} SET ?`, mySqlTableEmployee); //change emplyeeobject with new name of server object. 
 
     // Send a success response to the client
     res.json({ success: true, message: 'Data inserted successfully' });
