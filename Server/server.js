@@ -2,8 +2,9 @@ import express from 'express';
 //import multer from 'multer';
 import cors from 'cors';
 import mysql from 'mysql2/promise';
-import {config} from 'dotenv'
-config()
+import {config} from 'dotenv';
+config();
+
 
 //Middleware 
 const app = express(); 
@@ -15,25 +16,15 @@ app.use(express.json());
 // Middleware to parse URL-encoded data in the request body
 app.use(express.urlencoded({ extended: true }));
 
-
-
 //Database//
 const pool = mysql.createPool({
-    host:'127.0.0.1',
+    host: process.env.DB_HOST,
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE
-})
-/*const result= await pool.query('select * from employee');
-console.log('result',result);
-const rows = result[0];
-console.log('rows',rows)
-const connection = await pool.getConnection();
-//console.log('connection',connection)
-app.get('/test', (req, res) => {
-    res.send('Hello from Server!');
-}); */
+    database: process.env.DATABASE,
+});
 
+// Database Routes
  app.get('/getAllEmployees', async (req, res) => {
         const result = await pool.query("select * from employee");
         const rows = result[0];
@@ -44,7 +35,7 @@ app.get('/test', (req, res) => {
 });
  
 app.get('/getCompanyInfo', async (req, res) => {
-  const result= await pool.query('select * from companyInfo');
+  const result= await pool.query('select * from companyinfo');
   const rows = result[0];
     console.log('companyInfo Rows',rows);
     res.json({companyInfo: rows});
@@ -86,8 +77,8 @@ app.post('/addEmployee', async (req, res) => {
 
 
 
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 

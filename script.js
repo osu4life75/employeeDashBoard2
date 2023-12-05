@@ -45,7 +45,7 @@ newEmployeeForm.addEventListener('submit',function(event){
 
  
 
-  fetch("http://localhost:3000/addEmployee",{
+  fetch('http://localhost:3000/addEmployee',{
     method: 'POST',
     headers: {
       'Content-Type': 'application/json', // Set the content type to JSON
@@ -79,14 +79,14 @@ newEmployeeForm.addEventListener('submit',function(event){
 
 window.onload = function () {
     console.log('Window has finished loading.');
-    getAllEmployees()
+    getAllEmployees(),
     getCompanyInfo()
     
 };
 
 
 function getAllEmployees() {
-    fetch("http://localhost:3000/getAllEmployees")
+    fetch('http://localhost:3000/getAllEmployees')
     .then(function(response){
         if(response.ok){
             return response.json();
@@ -113,7 +113,7 @@ function getAllEmployees() {
     
 };
 function getCompanyInfo() {
-    fetch("http://localhost:3000/getCompanyInfo")
+    fetch('http://localhost:3000/getCompanyInfo')
     .then(function(response){
         if(response.ok){
             return response.json();
