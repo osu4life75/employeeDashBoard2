@@ -75,6 +75,12 @@ app.post('/addEmployee', async (req, res) => {
   }
 });
 
+app.post('/getSpecificEmployee', async (req, res) => {
+  const result = await pool.query('select * from employee where ID = ?', [req.body.ID]);
+  const rows = result[0];
+  console.log('rows', rows)
+  res.json({employeeObj: rows[0]})
+})
 
 
 const PORT = 3000;

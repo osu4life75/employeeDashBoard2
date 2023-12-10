@@ -1,0 +1,77 @@
+/* body, form {
+    margin: 0;
+    padding: 0;
+  } */
+
+.header{
+    text-align: center;
+   
+}
+
+img{
+  width: 140px;
+  height: 140px;
+  margin-left: 0px;
+}
+
+.first-row{
+   margin: 0px;
+   width: fit-content;
+}
+
+#firstName, #lastName{
+   margin: 20px; 
+
+}
+
+.second-row{
+    margin-left: 140px;
+    width: 100%;
+}
+
+#gender{
+    width: 15%;
+}
+
+#dob, #phone{
+    margin: 40px;
+}
+
+.third-row{
+   margin-top: 0px;
+   
+   box-sizing: border-box;
+}
+
+#address{
+    width: 93%;
+}
+
+.fourth-row{
+    margin: 50px 50px 50px 0px;
+    width: 100%;
+}
+
+#city,#state,#zip{
+    margin-right: 40px;
+}
+
+.button{
+    margin-top: 50px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.form-container {
+    width: 90%; /* Adjust the width as needed */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

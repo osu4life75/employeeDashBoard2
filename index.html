@@ -9,7 +9,7 @@
     <title>Document</title>
 </head> 
 <body>
- 
+  <p>Click <a href="pages/employee/employee.html">here</a> to go to Page 2</p>
 <div class="container">
     <h1 id="companyname">Company Name</h1>
     <div class="row">
@@ -52,7 +52,7 @@
   </div>
    <div class="row mt-3">
         <div class="col-12">
-          <a href="pages/employee/employee.html">
+          <a href="pages/employee/employee.html" id="eomAnchor">
             <div class="card mb-3">
                 <div class="row g-0">
                   <div class="col-md-5">
@@ -83,6 +83,15 @@
         </div>
     </div>
     <button class="btn btn-primary" id='modalButton'>Add Employee</button>
+    <div class="row mt-3">
+      <div class="col-12">
+        <label for="employeesDropDown">Employess</label>
+        <select id="employeesDropDown" class="form-control">
+          <!-- dynamically add options -->
+        </select>
+        <button tupe="button" onclick="employeeDropdownRedirect()" class'btn btn-primary'>Select</button>
+      </div>
+    </div>
 </div>
 <div id="addEmployeeModal" class="modal">
   <div class="modal-content">

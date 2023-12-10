@@ -96,14 +96,23 @@ function getAllEmployees() {
       .then(function(data){
         console.log('data',data);
         let employeesArray = data.employees;
+        // set up options for employees dropdown
+        let employeesSelect = document.getElementById('employeesDropDown');
+        for (var i=0; i<employeesArray.length; i++){
+          let option = new Option (`${employeesArray[i].FirstName} ${employeesArray[i].LastName}`, employeesArray[i].ID);
+          employeesSelect.add(option);
+        }
+
+
         // get random number for employee of the month
        let randomEmployeeIndex = Math.floor(Math.random() * (employeesArray.length));
-        console.log("randomEmployeeIndex",randomEmployeeIndex);
        let randomeEmployee2 = employeesArray[randomEmployeeIndex];
+       console.log(randomeEmployee2);
         getEmployeeofTheMonth(randomeEmployee2);
         totalEmployees(employeesArray);
         maleToFemaleRatio(employeesArray);
         percLiveInUS(employeesArray);
+        setEOMHref(randomeEmployee2)
 
       })
       .catch(function(error){
@@ -244,5 +253,21 @@ function percLiveInUS(allEmployees) {
  // let percentageElement = document.getElementById('percLiveInUS');
  // percentageElement.innerText = percentage + '%'; 
   document.getElementById('percLiveInUS').innerText = percentage + '%';
+}
+
+
+function setEOMHref(eom) {
+  console.log('eom',eom)
+  document.getElementById('eomAnchor').href= `./pages/employee/employee.html?id=${eom.ID}`;
+
+}
+
+function employeeDropdownRedirect() {
+  const selectedValue = document.getElementById('employeesDropDown').value;
+  console.log('selectedValue in setEmployeeHref()', selectedValue)
+  const url = `./pages/employee/employee.html?id=${selectedValue}`
+  // Navigate to the new URL
+  window.location.href = url;
+  
 }
 
