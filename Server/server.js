@@ -76,11 +76,37 @@ app.post('/addEmployee', async (req, res) => {
 });
 
 app.post('/getSpecificEmployee', async (req, res) => {
+  console.log('specificEmployee',req.body)
   const result = await pool.query('select * from employee where ID = ?', [req.body.ID]);
   const rows = result[0];
   console.log('rows', rows)
   res.json({employeeObj: rows[0]})
 })
+app.post('/updateEmployee', async (req, res) => {
+  console.log('req.body in updateEmployee', req.body)
+  try {
+    //create UUID for new entries
+    let result = await pool.query(`UPDATE employee SET ? WHERE ID = ?`, [req.body, req.body.ID])
+    console.log('result',result)
+    result = result[0];
+    // Check if the query was successful (affectedRows > 0)
+    if (result.affectedRows > 0) {
+      // Send a success response to the client
+      const result = await pool.query('select * from employee where ID = ?', [req.body.ID]);
+      const rows = result[0];
+      console.log('rows', rows)
+      res.json({ success: true, message: 'Employee update successfully', employeeObj: rows[0]});
+    } else {
+      // Send an error response if no rows were affected
+      res.json({ success: false, message: 'Employee not updated' });
+    }
+  } catch (error) {
+    // Handle any database or query errors
+    console.error('Error in /updateEmployee:', error);
+    res.json({ success: false, message: 'Internal server error' });
+  }
+})
+
 
 
 const PORT = 3000;

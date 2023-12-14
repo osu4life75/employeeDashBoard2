@@ -171,18 +171,57 @@ function formatDate(date) {
 
 
  // This is where the magic happens
- document.getElementById("myButton").addEventListener("click", submitForm);
+ function submitForm(){
+  let updatedEmployeeObj = {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      gender: document.getElementById('gender').value,
+      address: document.getElementById('address').value,
+      city: document.getElementById('city').value,
+      state: document.getElementById('state').value,
+      zip_code: document.getElementById('zip').value,
+      email: document.getElementById('email').value,
+      dob: document.getElementById('dob').value,
+      phone_number: document.getElementById('phone').value,
+  }
+  updatedEmployeeObj.ID = parseInt(employeeID);
 
-    function submitForm() {
-      // Let's change the text on the button when you click it
-      document.getElementById("myButton");
+  console.log('updatedEmployeeObj', updatedEmployeeObj)
 
-      // Now, let's make the button talk to us in the console
-      console.log('Button was clicked!');
- }
+
+  fetch('http://localhost:3000/updateEmployee', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedEmployeeObj)
+  })
+  .then(function(response){
+      if(response.ok){
+          return response.json();
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(function(data){
+     console.log('data returned in updateEmployee', data)
+     //getting success message. display in popup and clear/close modal
+     if(data.success){
+      alert(data.message)
+     }
+     else{
+      alert(data.message)
+     }
+    })
+    .catch(function(error){
+      console.log(error);
+      alert('something went wrong')
+    })
+
+
+}
 
  function getEmployeeData(ID){
-    console.log('uuid in getEOMData', ID)
+    console.log('ID in getEOMData', ID)
 
     fetch('http://localhost:3000/getSpecificEmployee', {
     method: 'POST',
@@ -215,12 +254,12 @@ function setEmployeeDataOnElements(employee){
   document.getElementById('firstName').value = `${employee.FirstName}`;
   document.getElementById('lastName').value = `${employee.LastName}`;
   document.getElementById('email').value = `${employee.Email}`;
-  // document.getElementById('address').value = `${employee.address}`;
+  document.getElementById('address').value = `${employee.address}`;
   document.getElementById('city').value = `${employee.City}`;
-  // document.getElementById('state').value = `${employee.state ? employee.state.toLowerCase() : ''}`;
-  // document.getElementById('zip').value = `${employee.zipcode}`;
+  document.getElementById('state').value = `${employee.state ? employee.state.toLowerCase() : ''}`;
+  document.getElementById('zip').value = `${employee.zip_code}`;
   document.getElementById('country').value = `${employee.Country.toLowerCase()}`;//fix countries in db to have full name
   document.getElementById('dob').value = `${formatDate(new Date(employee.DOB))}`;
-  // document.getElementById('phone').value = `${employee.phone}`;
+  document.getElementById('phone').value = `${employee.phone_number}`;
   document.getElementById('gender').value = `${employee.Gender.toLowerCase()}`;
 }
