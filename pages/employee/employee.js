@@ -1,4 +1,4 @@
-let employeeID;
+var employeeID;
 
 window.onload = function(){
   console.log('employee.js Window is finshied loading!')
@@ -172,6 +172,7 @@ function formatDate(date) {
 
  // This is where the magic happens
  function submitForm(){
+  console.log('Gn2')
   let updatedEmployeeObj = {
       firstName: document.getElementById('firstName').value,
       lastName: document.getElementById('lastName').value,
@@ -183,8 +184,9 @@ function formatDate(date) {
       email: document.getElementById('email').value,
       dob: document.getElementById('dob').value,
       phone_number: document.getElementById('phone').value,
-  }
-  updatedEmployeeObj.ID = parseInt(employeeID);
+      UUID: employeeID
+ }
+  
 
   console.log('updatedEmployeeObj', updatedEmployeeObj)
 
@@ -220,15 +222,15 @@ function formatDate(date) {
 
 }
 
- function getEmployeeData(ID){
-    console.log('ID in getEOMData', ID)
+ function getEmployeeData(uuid){
+    console.log('UUID in getEOMData', uuid)
 
     fetch('http://localhost:3000/getSpecificEmployee', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ID: ID}),
+    body: JSON.stringify({UUID: uuid}),
   })
   .then(function(response){
     if(response.ok){
@@ -262,4 +264,40 @@ function setEmployeeDataOnElements(employee){
   document.getElementById('dob').value = `${formatDate(new Date(employee.DOB))}`;
   document.getElementById('phone').value = `${employee.phone_number}`;
   document.getElementById('gender').value = `${employee.Gender.toLowerCase()}`;
+  
+}
+
+function deleteEmployee() {
+  console.log('G2N', employeeID)
+  fetch('http://localhost:3000/deleteButton', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({employeeID: employeeID})
+})
+.then(function(response){
+    if(response.ok){
+        return response.json();
+    }
+    throw new Error('Network response was not ok.');
+  })
+  .then(function(data){
+   console.log('data returned in deleteButton', data)
+   //getting success message. display in popup and clear/close modal
+   if(data.success){
+    alert(data.message)
+   }
+   else{
+    alert(data.message)
+   }
+  })
+  .catch(function(error){
+    console.log(error);
+    alert('something went wrong')
+  })
+
+
+
+  
 }

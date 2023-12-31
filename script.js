@@ -29,6 +29,11 @@ newEmployeeForm.addEventListener('submit',function(event){
   let newEmployeeCity = document.getElementById('employeeCityInput').value; 
   let newEmployeeCountry = document.getElementById('employeeCountryInput').value; 
   let newEmployeeDOB = document.getElementById('employeeDOBInput').value; 
+  let newEmployeeAddress = document.getElementById('employeeAddressInput').value; 
+  let newEmployeeState = document.getElementById('employeeStateInput').value; 
+  let newEmployeeZip = document.getElementById('employeeZipInput').value; 
+  let newEmployeePhone = document.getElementById('employeePhoneInput').value; 
+  
   
   // copy above line to add all v;lues of the form
   // once complete we will place info in object
@@ -40,7 +45,11 @@ newEmployeeForm.addEventListener('submit',function(event){
       newEmployeeEmail: newEmployeeEmail,
       newEmployeeCity: newEmployeeCity,
       newEmployeeCountry: newEmployeeCountry,
-      newEmployeeDOB: newEmployeeDOB
+      newEmployeeDOB: newEmployeeDOB,
+      newEmployeeAddress: newEmployeeAddress,
+      newEmployeeState: newEmployeeState,
+      newEmployeeZip: newEmployeeZip,
+      newEmployeePhone: newEmployeePhone,
   }
 
  
@@ -79,8 +88,9 @@ newEmployeeForm.addEventListener('submit',function(event){
 
 window.onload = function () {
     console.log('Window has finished loading.');
-    getAllEmployees(),
+    getAllEmployees()
     getCompanyInfo()
+    
     
 };
 
@@ -96,10 +106,11 @@ function getAllEmployees() {
       .then(function(data){
         console.log('data',data);
         let employeesArray = data.employees;
+        console.log('empArray', employeesArray)
         // set up options for employees dropdown
         let employeesSelect = document.getElementById('employeesDropDown');
         for (var i=0; i<employeesArray.length; i++){
-          let option = new Option (`${employeesArray[i].FirstName} ${employeesArray[i].LastName}`, employeesArray[i].ID);
+          let option = new Option (`${employeesArray[i].FirstName} ${employeesArray[i].LastName}`, employeesArray[i].UUID);
           employeesSelect.add(option);
         }
 
@@ -206,10 +217,10 @@ function getEmployeeofTheMonth(randomEmployee) {
 
 }
 
-function totalEmployees(allEmployees) {
-  const totalNumberOFEmployees = allEmployees.length;
+function totalEmployees(employeesArray) {
+  const totalNumberOFEmployees = employeesArray.length;
   let totalEmployees=document.getElementById('totalEmployees');
-  totalEmployees.innerText = `${allEmployees.length}`;
+  totalEmployees.innerText = `${employeesArray.length}`;
   console.log('total employees',totalNumberOFEmployees);
 }
 
@@ -223,7 +234,7 @@ function maleToFemaleRatio(allEmployees) {
   for (let i = 0; i < allEmployees.length; i++) {
     const element = allEmployees[i];
     console.log('element', element);
-    if (element.Gender === 'Male') {
+    if (element.Gender === 'male') {
       maleCount = maleCount + 1;
     }else{
       femaleCount = femaleCount + 1;
@@ -258,7 +269,7 @@ function percLiveInUS(allEmployees) {
 
 function setEOMHref(eom) {
   console.log('eom',eom)
-  document.getElementById('eomAnchor').href= `./pages/employee/employee.html?id=${eom.ID}`;
+  document.getElementById('eomAnchor').href= `./pages/employee/employee.html?id=${eom.UUID}`;
 
 }
 

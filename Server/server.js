@@ -46,6 +46,8 @@ app.post('/addEmployee', async (req, res) => {
 
   // Create a new variable for the employee object
   let employeeObject = req.body;
+  let UUID = generateRandomAlphaNumeric()
+  console.log('generate',UUID)
 
   const mySqlTableEmployee = {
     FirstName: req.body.firstName,
@@ -54,7 +56,12 @@ app.post('/addEmployee', async (req, res) => {
     Email: req.body.newEmployeeEmail,
     City: req.body.newEmployeeCity,
     Country: req.body.newEmployeeCountry,
-    DOB: req.body.newEmployeeDOB
+    DOB: req.body.newEmployeeDOB,
+    address: req.body.newEmployeeAddress,
+    state: req.body.newEmployeeState,
+    zip_code: req.body.newEmployeeZip,
+    phone_number: req.body.newEmployeePhone,
+    UUID: UUID
   };
 
   // Perform any data manipulations here if needed
@@ -77,25 +84,23 @@ app.post('/addEmployee', async (req, res) => {
 
 app.post('/getSpecificEmployee', async (req, res) => {
   console.log('specificEmployee',req.body)
-  const result = await pool.query('select * from employee where ID = ?', [req.body.ID]);
+  const result = await pool.query('select * from employee where UUID = ?', [req.body.UUID]);
   const rows = result[0];
   console.log('rows', rows)
   res.json({employeeObj: rows[0]})
 })
+
 app.post('/updateEmployee', async (req, res) => {
   console.log('req.body in updateEmployee', req.body)
   try {
     //create UUID for new entries
-    let result = await pool.query(`UPDATE employee SET ? WHERE ID = ?`, [req.body, req.body.ID])
+    let result = await pool.query(`UPDATE employee SET ? WHERE UUID = ?`, [req.body, req.body.UUID])
     console.log('result',result)
     result = result[0];
     // Check if the query was successful (affectedRows > 0)
     if (result.affectedRows > 0) {
       // Send a success response to the client
-      const result = await pool.query('select * from employee where ID = ?', [req.body.ID]);
-      const rows = result[0];
-      console.log('rows', rows)
-      res.json({ success: true, message: 'Employee update successfully', employeeObj: rows[0]});
+       res.json({ success: true, message: 'Employee update successfully'});
     } else {
       // Send an error response if no rows were affected
       res.json({ success: false, message: 'Employee not updated' });
@@ -106,6 +111,43 @@ app.post('/updateEmployee', async (req, res) => {
     res.json({ success: false, message: 'Internal server error' });
   }
 })
+
+const generateRandomAlphaNumeric = (length=10) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+
+  return result;
+}
+
+app.post('/deleteButton', async (req, res) => {
+  console.log('req.body in deleteButton', req.body)
+  try {
+    //create UUID for new entries
+    let result = await pool.query(`Delete from employee WHERE UUID = ?`, [req.body.employeeID])
+    console.log('result',result)
+    result = result[0];
+    // Check if the query was successful (affectedRows > 0)
+    if (result.affectedRows > 0) {
+      // Send a success response to the client
+      res.json({ success: true, message: 'Employee Deleted successfully'});
+      return;// res.redirect('/index.html');
+      
+    } else {
+      // Send an error response if no rows were affected
+      res.json({ success: false, message: 'Employee not deleted' });
+    }
+  } catch (error) {
+    // Handle any database or query errors
+    console.error('Error in /deleteButton:', error);
+    res.json({ success: false, message: 'Internal server error' });
+  }
+})
+
 
 
 
