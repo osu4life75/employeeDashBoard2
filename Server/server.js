@@ -25,6 +25,15 @@ const pool = mysql.createPool({
 });
 
 // Database Routes
+app.get('/getGenders', async (req, res) => {
+  const result = await pool.query("select * from gender");
+  const rows = result[0];
+  console.log('employeeRows',rows);
+  res.json({employees: rows})
+  
+
+});
+
  app.get('/getAllEmployees', async (req, res) => {
         const result = await pool.query("select * from employee");
         const rows = result[0];

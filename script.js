@@ -90,9 +90,27 @@ window.onload = function () {
     console.log('Window has finished loading.');
     getAllEmployees()
     getCompanyInfo()
+    getGenders()
     
     
 };
+
+function getGenders(){
+  fetch('http://localhost:3000/getGenders')
+  .then(function(response){
+    if(response.ok){
+        return response.json();
+    }
+    throw new Error('Network response was not ok.');
+  })
+  .then(function(data){
+    console.log('data',data);
+ })
+  .catch(function(error){
+    console.log(error);
+  })
+  
+}
 
 
 function getAllEmployees() {
