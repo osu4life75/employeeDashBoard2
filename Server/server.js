@@ -28,8 +28,8 @@ const pool = mysql.createPool({
 app.get('/getGenders', async (req, res) => {
   const result = await pool.query("select * from gender");
   const rows = result[0];
-  console.log('employeeRows',rows);
-  res.json({employees: rows})
+  console.log('genderRows',rows);
+  res.json({genders: rows})
   
 
 });
@@ -61,7 +61,7 @@ app.post('/addEmployee', async (req, res) => {
   const mySqlTableEmployee = {
     FirstName: req.body.firstName,
     LastName: req.body.lastName,
-    Gender: req.body.newEmployeeGender,
+    GenderID: req.body.newEmployeeGender,
     Email: req.body.newEmployeeEmail,
     City: req.body.newEmployeeCity,
     Country: req.body.newEmployeeCountry,

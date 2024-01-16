@@ -1,6 +1,7 @@
 // main.js
 // import getAge from './util/util.js';
 // Your main code
+var genders;
 var modal = document.getElementById('addEmployeeModal');
 var openModalButton = document.getElementById('modalButton');
 var closedModalButton = document.getElementById('closeModalButton');
@@ -24,7 +25,7 @@ newEmployeeForm.addEventListener('submit',function(event){
   event.preventDefault();
   let firstName = document.getElementById('employeeFirstName').value; 
   let lastName = document.getElementById('employeeLastName').value; 
-  let newEmployeeGender = document.getElementById('employeeGenderInput').value;  
+  let newEmployeeGender = document.getElementById('genders').value;  
   let newEmployeeEmail = document.getElementById('employeeEmailInput').value; 
   let newEmployeeCity = document.getElementById('employeeCityInput').value; 
   let newEmployeeCountry = document.getElementById('employeeCountryInput').value; 
@@ -33,6 +34,7 @@ newEmployeeForm.addEventListener('submit',function(event){
   let newEmployeeState = document.getElementById('employeeStateInput').value; 
   let newEmployeeZip = document.getElementById('employeeZipInput').value; 
   let newEmployeePhone = document.getElementById('employeePhoneInput').value; 
+  console.log('employeeGender' , newEmployeeGender);
   
   
   // copy above line to add all v;lues of the form
@@ -69,11 +71,18 @@ newEmployeeForm.addEventListener('submit',function(event){
     })
     .then(function(data){
       console.log('data',data);
-      
+      if (data.success) {
+        alert(data.message);
+        window.location.reload();
+      }
+      else{
+        alert(data.message);
+      }
 
     })
     .catch(function(error){
       console.log(error);
+      alert('Server Error Try Again');
     })
   
   
@@ -88,9 +97,9 @@ newEmployeeForm.addEventListener('submit',function(event){
 
 window.onload = function () {
     console.log('Window has finished loading.');
+    getGenders()
     getAllEmployees()
     getCompanyInfo()
-    getGenders()
     
     
 };
@@ -104,10 +113,18 @@ function getGenders(){
     throw new Error('Network response was not ok.');
   })
   .then(function(data){
-    console.log('data',data);
- })
+    console.log('genders',data.genders);
+    genders = data.genders;
+    let genderSelect = document.getElementById('genders');
+    for (let i = 0; i < genders.length; i++) {
+      var option = new Option(genders[i].gender, genders[i].id);
+      genderSelect.add(option);
+      
+    }
+` ` })
   .catch(function(error){
     console.log(error);
+    alert('failed to load genders');
   })
   
 }
@@ -122,9 +139,8 @@ function getAllEmployees() {
         throw new Error('Network response was not ok.');
       })
       .then(function(data){
-        console.log('data',data);
+        
         let employeesArray = data.employees;
-        console.log('empArray', employeesArray)
         // set up options for employees dropdown
         let employeesSelect = document.getElementById('employeesDropDown');
         for (var i=0; i<employeesArray.length; i++){
@@ -136,7 +152,6 @@ function getAllEmployees() {
         // get random number for employee of the month
        let randomEmployeeIndex = Math.floor(Math.random() * (employeesArray.length));
        let randomeEmployee2 = employeesArray[randomEmployeeIndex];
-       console.log(randomeEmployee2);
         getEmployeeofTheMonth(randomeEmployee2);
         totalEmployees(employeesArray);
         maleToFemaleRatio(employeesArray);
@@ -159,11 +174,8 @@ function getCompanyInfo() {
         throw new Error('Network response was not ok.');
       })
       .then(function(data){
-        console.log('compyInfo Data',data.companyInfo);
         let companyInfoArray = data.companyInfo;
-        console.log('companyInfoArray',companyInfoArray)
         const name = companyInfoArray[0].name;
-        console.log(name)
         let companyNameElement = document.querySelector('#companyname')
         companyNameElement.innerText = name;
         let businessCategory = document.getElementById("businessCategory")
@@ -177,25 +189,8 @@ function getCompanyInfo() {
     
     
 };
-function test(){
-  fetch("http://localhost:3000/test") 
-  .then(function(response){
-    if(response.ok){
-        return response.json();
-    }
-    throw new Error('Network response was not ok.');
-  })
-  .then(function(data){
-    console.log(data);
-  })
-  .catch(function(error){
-    console.log(error);
-  })
-
-};
 
 function getAge(dob){
-  console.log('dob',dob);
   let dateOfBirth = new Date(dob);
   let currentDate = new Date();
   let age = currentDate.getFullYear() - dateOfBirth.getFullYear();
@@ -214,16 +209,28 @@ function getAge(dob){
 
  }
 
+ function getGenderString(genderID) {
+  console.log('genderArray',genders)
+  let genderString;
+  for (let i = 0; i < genders.length; i++) {
+    console.log(genders[i]); 
+    if (genders[i].id===genderID) {
+      genderString = genders[i].gender;
+      break
+     }
+  }
+  return genderString;
+ }
+// use the above code as a template for setEmployeeDataOnElements to handle the genders.
 function getEmployeeofTheMonth(randomEmployee) {
-  console.log('EOM', randomEmployee);
+  console.log('rando',randomEmployee);
   let employeeName = document.getElementById('employeeName');
   employeeName.innerText = `${randomEmployee.FirstName} ${randomEmployee.LastName}`;
   let employeeAge = document.getElementById('employeeAge')
   let age = getAge(randomEmployee.DOB)
-  console.log('age',age);
   employeeAge.innerText = `${age}`;
   let employeeGender = document.getElementById('employeeGender')
-  employeeGender.innerText = `${randomEmployee.Gender}`;
+  employeeGender.innerText = getGenderString(randomEmployee.GenderID);
   let employeeEmail = document.getElementById('employeeEmail')
   employeeEmail.innerText = `${randomEmployee.Email}`;
   let employeeCity = document.getElementById('employeeCity')
@@ -239,30 +246,37 @@ function totalEmployees(employeesArray) {
   const totalNumberOFEmployees = employeesArray.length;
   let totalEmployees=document.getElementById('totalEmployees');
   totalEmployees.innerText = `${employeesArray.length}`;
-  console.log('total employees',totalNumberOFEmployees);
 }
 
-function maleToFemaleRatio(allEmployees) {
- //loop through allEmployees it's an array
- // for loop for ever iteration you will find a gender
- //need two variables male and female count
- console.log('allEmployees', allEmployees[0].Gender);
+function maleToFemaleRatio(employeesArray) {
+  // Loop through allEmployees; it's an array
+  // For each iteration, you will find a gender
+  // Need three variables: male, female, and other count
+  console.log('maleToFemale', employeesArray[0]);
   let femaleCount = 0;
   let maleCount = 0;
-  for (let i = 0; i < allEmployees.length; i++) {
-    const element = allEmployees[i];
+  let otherCount = 0;
+
+  for (let i = 0; i < employeesArray.length; i++) {
+    const element = employeesArray[i];
     console.log('element', element);
-    if (element.Gender === 'male') {
+
+    // Check the gender and update counts accordingly
+    if (element.GenderID === 1) {
       maleCount = maleCount + 1;
-    }else{
+    } else if (element.GenderID === 2) {
       femaleCount = femaleCount + 1;
+    } else {
+      // Assuming 'Other' if not Male or Female
+      otherCount = otherCount + 1;
     }
   }
-  console.log('totalFemandMale',femaleCount, maleCount);
+
+  console.log('totalMaleFemaleOther', maleCount, femaleCount, otherCount);
   let ratio = document.getElementById('maleToFemaleRatio');
-  ratio.innerText = maleCount + " /" + femaleCount;
-  
+  ratio.innerText = `${maleCount} / ${femaleCount} / ${otherCount}`;
 }
+
 function percLiveInUS(allEmployees) {
  //total employess 23 how many live in US?
  //divide total US employess by allEmployees * by 100
@@ -276,9 +290,7 @@ function percLiveInUS(allEmployees) {
     }
   
   } 
-  console.log('usResidents', usResident);
   let percentage = ((usResident/allEmployees.length) * 100).toFixed(0); 
-  console.log('percentage', percentage);
  // let percentageElement = document.getElementById('percLiveInUS');
  // percentageElement.innerText = percentage + '%'; 
   document.getElementById('percLiveInUS').innerText = percentage + '%';
@@ -286,14 +298,12 @@ function percLiveInUS(allEmployees) {
 
 
 function setEOMHref(eom) {
-  console.log('eom',eom)
   document.getElementById('eomAnchor').href= `./pages/employee/employee.html?id=${eom.UUID}`;
 
 }
 
 function employeeDropdownRedirect() {
   const selectedValue = document.getElementById('employeesDropDown').value;
-  console.log('selectedValue in setEmployeeHref()', selectedValue)
   const url = `./pages/employee/employee.html?id=${selectedValue}`
   // Navigate to the new URL
   window.location.href = url;

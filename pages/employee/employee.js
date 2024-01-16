@@ -143,7 +143,7 @@ const states = [
 for (var i = 0; i < states.length; i++) {
     var option = new Option(states[i].label, states[i].value);
     stateSelect.add(option);
-  }
+}
 
 let genderSelect = document.getElementById('gender');
 
@@ -154,11 +154,11 @@ const genders = [
 ]
 
 for (let i = 0; i < genders.length; i++) {
- const option = new Option(genders[i].label,genders[i].value);
+ const option = new Option(genders[i].label, genders[i].value);
  genderSelect.add(option);
   
   }
-
+ 
 };
 
 function formatDate(date) {
@@ -263,7 +263,9 @@ function setEmployeeDataOnElements(employee){
   document.getElementById('country').value = `${employee.Country.toLowerCase()}`;//fix countries in db to have full name
   document.getElementById('dob').value = `${formatDate(new Date(employee.DOB))}`;
   document.getElementById('phone').value = `${employee.phone_number}`;
-  document.getElementById('gender').value = `${employee.Gender.toLowerCase()}`;
+  document.getElementById('genderSelect').value = (genders.gender);
+  // Need to get selected gender obj {label:"Male", value:1}
+  // attempt utils file with live server
   
 }
 
