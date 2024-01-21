@@ -263,7 +263,7 @@ function setEmployeeDataOnElements(employee){
   document.getElementById('country').value = `${employee.Country.toLowerCase()}`;//fix countries in db to have full name
   document.getElementById('dob').value = `${formatDate(new Date(employee.DOB))}`;
   document.getElementById('phone').value = `${employee.phone_number}`;
-  document.getElementById('genderSelect').value = (genders.gender);
+  document.getElementById('genderSelect').value = `${employee.GenderID}`;
   // Need to get selected gender obj {label:"Male", value:1}
   // attempt utils file with live server
   
