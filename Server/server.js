@@ -37,7 +37,7 @@ app.get('/getGenders', async (req, res) => {
  app.get('/getAllEmployees', async (req, res) => {
         const result = await pool.query("select * from employee");
         const rows = result[0];
-        console.log('employeeRows',rows);
+        // console.log('employeeRows',rows);
         res.json({employees: rows})
         
      
@@ -46,17 +46,17 @@ app.get('/getGenders', async (req, res) => {
 app.get('/getCompanyInfo', async (req, res) => {
   const result= await pool.query('select * from companyinfo');
   const rows = result[0];
-    console.log('companyInfo Rows',rows);
+    // console.log('companyInfo Rows',rows);
     res.json({companyInfo: rows});
 }); 
 
 app.post('/addEmployee', async (req, res) => {
-  console.log('req', req.body);
+  // console.log('req', req.body);
 
   // Create a new variable for the employee object
   let employeeObject = req.body;
   let UUID = generateRandomAlphaNumeric()
-  console.log('generate',UUID)
+  // console.log('generate',UUID)
 
   const mySqlTableEmployee = {
     FirstName: req.body.firstName,
@@ -92,19 +92,19 @@ app.post('/addEmployee', async (req, res) => {
 });
 
 app.post('/getSpecificEmployee', async (req, res) => {
-  console.log('specificEmployee',req.body)
+  // console.log('specificEmployee',req.body)
   const result = await pool.query('select * from employee where UUID = ?', [req.body.UUID]);
   const rows = result[0];
-  console.log('rows', rows)
+  // console.log('rows', rows)
   res.json({employeeObj: rows[0]})
 })
 
 app.post('/updateEmployee', async (req, res) => {
-  console.log('req.body in updateEmployee', req.body)
+  // console.log('req.body in updateEmployee', req.body)
   try {
     //create UUID for new entries
     let result = await pool.query(`UPDATE employee SET ? WHERE UUID = ?`, [req.body, req.body.UUID])
-    console.log('result',result)
+    // console.log('result',result)
     result = result[0];
     // Check if the query was successful (affectedRows > 0)
     if (result.affectedRows > 0) {
@@ -134,11 +134,11 @@ const generateRandomAlphaNumeric = (length=10) => {
 }
 
 app.post('/deleteButton', async (req, res) => {
-  console.log('req.body in deleteButton', req.body)
+  // console.log('req.body in deleteButton', req.body)
   try {
     //create UUID for new entries
     let result = await pool.query(`Delete from employee WHERE UUID = ?`, [req.body.employeeID])
-    console.log('result',result)
+    // console.log('result',result)
     result = result[0];
     // Check if the query was successful (affectedRows > 0)
     if (result.affectedRows > 0) {

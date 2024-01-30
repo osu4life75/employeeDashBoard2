@@ -107,6 +107,7 @@ window.onload = function () {
 function getGenders(){
   fetch('http://localhost:3000/getGenders')
   .then(function(response){
+    console.log('response in getGenders of script.js', response)
     if(response.ok){
         return response.json();
     }
@@ -121,7 +122,7 @@ function getGenders(){
       genderSelect.add(option);
       
     }
-` ` })
+ })
   .catch(function(error){
     console.log(error);
     alert('failed to load genders');
