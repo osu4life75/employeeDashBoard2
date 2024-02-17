@@ -1,14 +1,16 @@
 var employeeID;
 var updateEmployeeGender;
+var updateEmployeeState;
 window.onload = function(){
   console.log('employee.js Window is finshied loading!');
   getGenders();
+  getStates();
 
 //get id from query params and pass to getEOMData() 
   const urlParams = new URLSearchParams(window.location.search);
   employeeID = urlParams.get('id');
     
-  getEmployeeData(employeeID)
+  // getEmployeeData(employeeID)
   //set up options for Country
   let countrySelect = document.getElementById("country");
   const countries = [
@@ -141,13 +143,36 @@ window.onload = function(){
       { label: 'Victoria', value: 'victoria' }
   ];
     
-  for (var i = 0; i < states.length; i++) {
-      var option = new Option(states[i].label, states[i].value);
-      stateSelect.add(option);
-  }
+}; 
 
+function getStates() {
+  console.log('updateEmployeeState', updateEmployeeState);
+  fetch('http://localhost:3000/getStates')
+    .then(function(response) {
+      console.log('response in getStates', response);
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error('Network response was not ok.');
+    })
+    .then(function(data) {
+      console.log('states', data.states);
+      updateEmployeeState = data.states;
+      let stateSelect = document.getElementById('state');
+      // stateSelect.innerHTML = ""; // Clear existing options
+      for (let i = 0; i < updateEmployeeState.length; i++) {
+        var option = new Option(updateEmployeeState[i].state_name, updateEmployeeState[i].id);
+        stateSelect.add(option);
+      }
+      
 
-};
+    })
+    .catch(function(error) {
+      console.log(error);
+      alert('Failed to load states');
+    });
+}
+
 
 function formatDate(date) {
   const year = date.getFullYear();
@@ -239,11 +264,11 @@ function formatDate(date) {
 }
 
 function getGenderString(genderID) {
-  console.log(genderID)
-  console.log('genderArray',genders)
+  console.log('gender id',genderID)
+  console.log('updateEmployee',updateEmployeeGender)
   let genderString;
   for (let i = 0; i < updateEmployeeGender.length; i++) {
-    console.log(genders[i]); 
+    console.log(updateEmployeeGender[i]); 
     if (updateEmployeeGender[i].id===genderID) {
       genderString = updateEmployeeGender[i].gender;
       break
@@ -255,8 +280,8 @@ function getGenderString(genderID) {
 
 
 
-function setEmployeeDataOnElements(employee){
-  console.log('employee in setEmployeeDataOnElements', employee)
+function setEmployeeDataOnElements(employee, states){
+  console.log('employee in setEmployeeDataOnElements', employee, states)
   //get elements 
   document.getElementById('picture').src = `${employee.Picture}`;
   document.getElementById('firstName').value = `${employee.FirstName}`;
@@ -264,16 +289,16 @@ function setEmployeeDataOnElements(employee){
   document.getElementById('email').value = `${employee.Email}`;
   document.getElementById('address').value = `${employee.address}`;
   document.getElementById('city').value = `${employee.City}`;
-  document.getElementById('state').value = `${employee.state ? employee.state.toLowerCase() : ''}`;
+  // document.getElementById('state').value = `${employee.state ? employee.state.toLowerCase() : ''}`;
+  document.getElementById('state').value = states.state_name;
   document.getElementById('zip').value = `${employee.zip_code}`;
   document.getElementById('country').value = `${employee.Country.toLowerCase()}`;//fix countries in db to have full name
   document.getElementById('dob').value = `${formatDate(new Date(employee.DOB))}`;
   document.getElementById('phone').value = `${employee.phone_number}`;
-  var newOption = document.createElement('option');
-  newOption.text = getGenderString(employee.GenderID);
-  newOption.value = employee.GenderID;
-  console.log('new option', newOption);
- document.getElementById('genders').appendChild(newOption);
+  // var newOption = document.createElement('option');
+  // newOption.text = getGenderString(employee.GenderID);
+  // newOption.value = employee.GenderID;
+  document.getElementById('genders').value = employee.GenderID;
 
   // Need to get selected gender obj {label:"Male", value:1}
   // attempt utils file with live server
@@ -283,7 +308,7 @@ function setEmployeeDataOnElements(employee){
 
 
 function getGenders(){
-  console.log('GN2 Genders', genders),
+  console.log('updateEmployeeGender', updateEmployeeGender),
   fetch('http://localhost:3000/getGenders')
   .then(function(response){
     console.log('response in getGenders', response);
@@ -301,6 +326,7 @@ function getGenders(){
       genderSelect.add(option);
       
     }
+    getEmployeeData(employeeID)
   })
   .catch(function(error){
     console.log(error);
@@ -340,7 +366,4 @@ function deleteEmployee() {
     alert('something went wrong')
   })
 
-
-
-  
 }

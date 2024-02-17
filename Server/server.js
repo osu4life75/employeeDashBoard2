@@ -30,7 +30,14 @@ app.get('/getGenders', async (req, res) => {
   const rows = result[0];
   console.log('genderRows',rows);
   res.json({genders: rows})
-  
+
+});
+
+app.get('/getStates', async (req, res) => {
+  const result = await pool.query("select * from states");
+  const rows = result[0];
+  console.log('state rows',rows);
+  res.json({states: rows})
 
 });
 
@@ -156,8 +163,6 @@ app.post('/deleteButton', async (req, res) => {
     res.json({ success: false, message: 'Internal server error' });
   }
 })
-
-
 
 
 const PORT = 3000;
