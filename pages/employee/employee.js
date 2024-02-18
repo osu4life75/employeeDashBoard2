@@ -199,6 +199,9 @@ function formatDate(date) {
       phone_number: document.getElementById('phone').value,
       UUID: employeeID
  }
+  console.log("🚀 ~ submitForm ~ updatedEmployeeObj.state:", updatedEmployeeObj.state)
+  console.log("🚀 ~ submitForm ~ updatedEmployeeObj.state:", updatedEmployeeObj.state)
+  console.log("🚀 ~ submitForm ~ updatedEmployeeObj.state:", updatedEmployeeObj.state)
   
 
   console.log('updatedEmployeeObj', updatedEmployeeObj)
