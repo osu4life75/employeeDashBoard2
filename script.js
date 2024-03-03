@@ -36,11 +36,7 @@ newEmployeeForm.addEventListener('submit',function(event){
   let newEmployeePhone = document.getElementById('employeePhoneInput').value; 
   console.log('employeeGender' , newEmployeeGender);
   
-  
-  // copy above line to add all v;lues of the form
-  // once complete we will place info in object
-  
-  const employeeObject =  {
+    const employeeObject =  {
       firstName: firstName,
       lastName: lastName,
       newEmployeeGender: newEmployeeGender,
@@ -85,50 +81,44 @@ newEmployeeForm.addEventListener('submit',function(event){
       alert('Server Error Try Again');
     })
   
-  
-
-
-  
-  // this is where we will handle form data
-  newEmployeeForm.reset();
+    newEmployeeForm.reset();
   
 })
 
 
 window.onload = function () {
-    console.log('Window has finished loading.');
-    getGenders()
-    getAllEmployees()
-    getCompanyInfo()
-    
-    
+  console.log('Window has finished loading.');
+  getGenders().then(function() {
+      getAllEmployees();
+      getCompanyInfo();
+  });
 };
 
-function getGenders(){
-  fetch('http://localhost:3000/getGenders')
-  .then(function(response){
-    console.log('response in getGenders of script.js', response)
-    if(response.ok){
-        return response.json();
-    }
-    throw new Error('Network response was not ok.');
-  })
-  .then(function(data){
-    console.log('genders',data.genders);
-    genders = data.genders;
-    let genderSelect = document.getElementById('genders');
-    for (let i = 0; i < genders.length; i++) {
-      var option = new Option(genders[i].gender, genders[i].id);
-      genderSelect.add(option);
-      
-    }
- })
-  .catch(function(error){
-    console.log(error);
-    alert('failed to load genders');
-  })
-  
+
+function getGenders() {
+  return fetch('http://localhost:3000/getGenders')
+      .then(function(response){
+          console.log('response in getGenders of script.js', response)
+          if(response.ok){
+              return response.json();
+          }
+          throw new Error('Network response was not ok.');
+      })
+      .then(function(data){
+          console.log('genders',data.genders);
+          genders = data.genders;
+          let genderSelect = document.getElementById('genders');
+          for (let i = 0; i < genders.length; i++) {
+              var option = new Option(genders[i].gender, genders[i].id);
+              genderSelect.add(option);
+          }
+      })
+      .catch(function(error){
+          console.log(error);
+          alert('failed to load genders');
+      });
 }
+
 
 
 function getAllEmployees() {
@@ -248,6 +238,8 @@ function totalEmployees(employeesArray) {
   let totalEmployees=document.getElementById('totalEmployees');
   totalEmployees.innerText = `${employeesArray.length}`;
 }
+
+
 
 function maleToFemaleRatio(employeesArray) {
   // Loop through allEmployees; it's an array

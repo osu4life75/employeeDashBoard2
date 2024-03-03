@@ -33,11 +33,20 @@ app.get('/getGenders', async (req, res) => {
 
 });
 
+
 app.get('/getStates', async (req, res) => {
   const result = await pool.query("select * from states");
   const rows = result[0];
   console.log('state rows',rows);
   res.json({states: rows})
+
+});
+
+app.get('/getCountries', async (req, res) => {
+  const result = await pool.query("select * from countries");
+  const rows = result[0];
+  console.log('country rows',rows);
+  res.json({countries: rows})
 
 });
 
