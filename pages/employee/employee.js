@@ -50,7 +50,7 @@ function getGenders() {
         );
         genderSelect.add(option);
       }
-      getEmployeeData(employeeID);
+      // getEmployeeData(employeeID);
     })
     .catch(function (error) {
       console.log(error);
@@ -178,9 +178,14 @@ window.onload = function () {
   document.addEventListener("DOMContentLoaded", function () {
     console.log("DOM is fully loaded. Initializing...");
   
-    // Add event listener for form submission
-    document.getElementById("myButton").addEventListener("click", submitForm);
-    console.log('button clicked', submitForm);
+    // Get the button element by its id
+    var myButton = document.getElementById("myButton");
+    console.log("🚀 ~ myButton:", myButton)
+  
+    // Add event listener for button click
+    myButton.addEventListener("click", submitForm);
+  
+    console.log('Button:', myButton);
   });
 
   // This is where the magic happens
