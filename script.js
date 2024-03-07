@@ -2,6 +2,9 @@
 // import getAge from './util/util.js';
 // Your main code
 var genders;
+var updateEmployeeState;
+var updateEmployeeCountry;
+
 var modal = document.getElementById('addEmployeeModal');
 var openModalButton = document.getElementById('modalButton');
 var closedModalButton = document.getElementById('closeModalButton');
@@ -28,10 +31,10 @@ newEmployeeForm.addEventListener('submit',function(event){
   let newEmployeeGender = document.getElementById('genders').value;  
   let newEmployeeEmail = document.getElementById('employeeEmailInput').value; 
   let newEmployeeCity = document.getElementById('employeeCityInput').value; 
-  let newEmployeeCountry = document.getElementById('employeeCountryInput').value; 
+  let newEmployeeCountry = document.getElementById('country').value; 
   let newEmployeeDOB = document.getElementById('employeeDOBInput').value; 
   let newEmployeeAddress = document.getElementById('employeeAddressInput').value; 
-  let newEmployeeState = document.getElementById('employeeStateInput').value; 
+  let newEmployeeState = document.getElementById('state').value; 
   let newEmployeeZip = document.getElementById('employeeZipInput').value; 
   let newEmployeePhone = document.getElementById('employeePhoneInput').value; 
   console.log('employeeGender' , newEmployeeGender);
@@ -91,9 +94,13 @@ window.onload = function () {
   getGenders().then(function() {
       getAllEmployees();
       getCompanyInfo();
+      getStates();
+      getCountries();
+
+     
   });
 };
-
+ 
 
 function getGenders() {
   return fetch('http://localhost:3000/getGenders')
@@ -119,6 +126,95 @@ function getGenders() {
       });
 }
 
+function getStates() {
+  fetch("http://localhost:3000/getStates")
+    .then(function (response) {
+      console.log("response in getStates", response);
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error("Network response was not ok.");
+    })
+    .then(function (data) {
+      updateEmployeeState = data.states;
+      
+      for (let i = 0; i < updateEmployeeState.length; i++) {
+        let stateName = updateEmployeeState[i].state_name;
+        updateEmployeeState[i].state_name =
+          stateName.charAt(0).toUpperCase() +
+          stateName.substring(1).toLowerCase();
+      }
+
+       let stateSelect = document.getElementById("state");
+      for (let i = 0; i < updateEmployeeState.length; i++) {
+        var option = new Option(
+          updateEmployeeState[i].state_name,
+          updateEmployeeState[i].id
+        );
+        stateSelect.add(option);
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("Failed to load states");
+    });
+}
+
+function getStateID(stateid) {
+  console.log("updateEmployeeState", updateEmployeeState);
+  let stateName;
+  for (let i = 0; i < updateEmployeeState.length; i++) {
+    console.log(updateEmployeeState[i]);
+    if (updateEmployeeState[i].id === stateid) {
+      stateName = updateEmployeeState[i].states;
+      break;
+    }
+  }
+  return stateName;
+}
+
+function getCountries() {
+  fetch("http://localhost:3000/getCountries")
+    .then(function (response) {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error("Network response was not ok.");
+    })
+    .then(function (data) {
+      updateEmployeeCountry = data.countries;
+      console.log(
+        "🚀 ~ .then ~ updateEmployeeCountry:",
+        updateEmployeeCountry
+      );
+     
+      let countrySelect = document.getElementById("country");
+      for (let i = 0; i < updateEmployeeCountry.length; i++) {
+        let option = new Option(
+          updateEmployeeCountry[i].label,
+          updateEmployeeCountry[i].id
+        );
+        countrySelect.add(option);
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+      alert("Failed to load countries");
+    });
+}
+
+function getCountryID(countryid) {
+  let countryName;
+  for (let i = 0; i < updateEmployeeCountry.length; i++) {
+    console.log(updateEmployeeCountry[i]);
+    if (updateEmployeeCountry[i].id === countryid) {
+      countryName = updateEmployeeCountry[i].label;
+      break;
+    }
+  }
+  return countryName;
+}
+
 
 
 function getAllEmployees() {
@@ -130,23 +226,22 @@ function getAllEmployees() {
         throw new Error('Network response was not ok.');
       })
       .then(function(data){
-        
-        let employeesArray = data.employees;
+         employee = data.employees;
         // set up options for employees dropdown
-        let employeesSelect = document.getElementById('employeesDropDown');
-        for (var i=0; i<employeesArray.length; i++){
-          let option = new Option (`${employeesArray[i].FirstName} ${employeesArray[i].LastName}`, employeesArray[i].UUID);
-          employeesSelect.add(option);
-        }
+        // let employeeTable = document.getElementById('employeesDropDown');
+        for (let i = 0; i < employee.length; i++) {
+          var option = new Option(employee[i].employee, employee[i].id);
+          // genderSelect.add(option);
+      }
 
 
         // get random number for employee of the month
-       let randomEmployeeIndex = Math.floor(Math.random() * (employeesArray.length));
-       let randomeEmployee2 = employeesArray[randomEmployeeIndex];
+       let randomEmployeeIndex = Math.floor(Math.random() * (employee.length));
+       let randomeEmployee2 = employee[randomEmployeeIndex];
         getEmployeeofTheMonth(randomeEmployee2);
-        totalEmployees(employeesArray);
-        maleToFemaleRatio(employeesArray);
-        percLiveInUS(employeesArray);
+        totalEmployees(employee);
+        maleToFemaleRatio(employee);
+        percLiveInUS(employee);
         setEOMHref(randomeEmployee2)
 
       })
@@ -233,25 +328,25 @@ function getEmployeeofTheMonth(randomEmployee) {
 
 }
 
-function totalEmployees(employeesArray) {
-  const totalNumberOFEmployees = employeesArray.length;
+function totalEmployees(employee) {
+  const totalNumberOFEmployees = employee.length;
   let totalEmployees=document.getElementById('totalEmployees');
-  totalEmployees.innerText = `${employeesArray.length}`;
+  totalEmployees.innerText = `${employee.length}`;
 }
 
 
 
-function maleToFemaleRatio(employeesArray) {
+function maleToFemaleRatio(employee) {
   // Loop through allEmployees; it's an array
   // For each iteration, you will find a gender
   // Need three variables: male, female, and other count
-  console.log('maleToFemale', employeesArray[0]);
+  console.log('maleToFemale', employee[0]);
   let femaleCount = 0;
   let maleCount = 0;
   let otherCount = 0;
 
-  for (let i = 0; i < employeesArray.length; i++) {
-    const element = employeesArray[i];
+  for (let i = 0; i < employee.length; i++) {
+    const element = employee[i];
     console.log('element', element);
 
     // Check the gender and update counts accordingly
@@ -275,15 +370,15 @@ function percLiveInUS(allEmployees) {
  //divide total US employess by allEmployees * by 100
   
   let usResident = 0;
-  for (let i = 0; i < allEmployees.length; i++) {
-    const element = allEmployees[i];
+  for (let i = 0; i < employee.length; i++) {
+    const element = employee[i];
     if(element.Country === 'USA'){
       usResident = usResident +1;
     
     }
   
   } 
-  let percentage = ((usResident/allEmployees.length) * 100).toFixed(0); 
+  let percentage = ((usResident/employee.length) * 100).toFixed(0); 
  // let percentageElement = document.getElementById('percLiveInUS');
  // percentageElement.innerText = percentage + '%'; 
   document.getElementById('percLiveInUS').innerText = percentage + '%';
@@ -302,4 +397,5 @@ function employeeDropdownRedirect() {
   window.location.href = url;
   
 }
+
 

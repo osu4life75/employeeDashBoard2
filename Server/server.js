@@ -67,10 +67,10 @@ app.get('/getCompanyInfo', async (req, res) => {
 }); 
 
 app.post('/addEmployee', async (req, res) => {
-  // console.log('req', req.body);
+  console.log('req', req.body);
 
   // Create a new variable for the employee object
-  let employeeObject = req.body;
+  // const employeeObject = req.body;
   let UUID = generateRandomAlphaNumeric()
   // console.log('generate',UUID)
 
@@ -88,6 +88,8 @@ app.post('/addEmployee', async (req, res) => {
     phone_number: req.body.newEmployeePhone,
     UUID: UUID
   };
+
+
 
   // Perform any data manipulations here if needed
 
@@ -116,26 +118,34 @@ app.post('/getSpecificEmployee', async (req, res) => {
 })
 
 app.post('/updateEmployee', async (req, res) => {
-  // console.log('req.body in updateEmployee', req.body)
   try {
-    //create UUID for new entries
-    let result = await pool.query(`UPDATE employee SET ? WHERE UUID = ?`, [req.body, req.body.UUID])
-    // console.log('result',result)
-    result = result[0];
+    const genderMap = {
+      'Male': 1,
+      'Female': 2,
+      'Other': 3
+    };
+
+    const genderKey = genderMap[req.body.gender];
+
+    // Update the employee record with the converted gender key
+    let result = await pool.query(`UPDATE employee SET Gender = ? WHERE UUID = ?`, [genderKey, req.body.UUID]);
+
     // Check if the query was successful (affectedRows > 0)
     if (result.affectedRows > 0) {
       // Send a success response to the client
-       res.json({ success: true, message: 'Employee update successfully'});
+      res.json({ success: true, message: 'Employee updated successfully' });
     } else {
       // Send an error response if no rows were affected
-      res.json({ success: false, message: 'Employee not updated' });
+      res.json({ success: false, message: 'Employee not found or not updated' });
     }
   } catch (error) {
     // Handle any database or query errors
     console.error('Error in /updateEmployee:', error);
-    res.json({ success: false, message: 'Internal server error' });
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
-})
+});
+
+
 
 const generateRandomAlphaNumeric = (length=10) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
