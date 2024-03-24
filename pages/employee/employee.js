@@ -2,11 +2,10 @@ var employeeID;
 var updateEmployeeGender;
 var updateEmployeeState;
 var updateEmployeeCountry;
+var GenderID;
 
 function getEmployeeData(uuid) {
-  console.log("UUID in getEOMData", uuid);
-
-  fetch("http://localhost:3000/getSpecificEmployee", {
+ fetch("http://localhost:3000/getSpecificEmployee", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -20,7 +19,7 @@ function getEmployeeData(uuid) {
       throw new Error("Network response was not ok.");
     })
     .then(function (data) {
-      console.log("data returned in getSpecificEmployee", data.employeeObj);
+      console.log("🚀 ~ data:", data)
       setEmployeeDataOnElements(data.employeeObj);
     })
     .catch(function (error) {
@@ -33,15 +32,14 @@ function getEmployeeData(uuid) {
 function getGenders() {
   fetch("http://localhost:3000/getGenders")
     .then(function (response) {
-      console.log("response in getGenders", response);
       if (response.ok) {
         return response.json();
       }
       throw new Error("Network response was not ok.");
     })
     .then(function (data) {
-      console.log("genders", data.genders);
       updateEmployeeGender = data.genders;
+      console.log("🚀 ~ updateEmployeeGender:", updateEmployeeGender)
       let genderSelect = document.getElementById("genders");
       for (let i = 0; i < updateEmployeeGender.length; i++) {
         var option = new Option(
@@ -50,7 +48,6 @@ function getGenders() {
         );
         genderSelect.add(option);
       }
-      // getEmployeeData(employeeID);
     })
     .catch(function (error) {
       console.log(error);
@@ -59,8 +56,8 @@ function getGenders() {
 }
 
 function setEmployeeDataOnElements(employee) {
-  console.log("employee in setEmployeeDataOnElements", employee);
-  //get elements
+  console.log("🚀 ~ setEmployeeDataOnElements ~ employee:", employee)
+  document.getElementById("genders").value = 3;
   document.getElementById("picture").src = `${employee.Picture}`;
   document.getElementById("firstName").value = `${employee.FirstName}`;
   document.getElementById("lastName").value = `${employee.LastName}`;
@@ -72,7 +69,9 @@ function setEmployeeDataOnElements(employee) {
   document.getElementById("country").value = employee.Country;
   document.getElementById("dob").value = `${formatDate(new Date(employee.DOB))}`;
   document.getElementById("phone").value = `${employee.phone_number}`;
-  document.getElementById("genders").value = employee.GenderID;
+  
+
+
 
   // Need to get selected gender obj {label:"Male", value:1}
   // attempt utils file with live server
@@ -88,8 +87,6 @@ window.onload = function () {
   employeeID = urlParams.get("id");
   
   getEmployeeData(employeeID);
-  
-
 };
   
    function getCountries() {
@@ -102,10 +99,7 @@ window.onload = function () {
       })
       .then(function (data) {
         updateEmployeeCountry = data.countries;
-        console.log(
-          "🚀 ~ .then ~ updateEmployeeCountry:",
-          updateEmployeeCountry
-        );
+        
        
         let countrySelect = document.getElementById("country");
         for (let i = 0; i < updateEmployeeCountry.length; i++) {
@@ -133,7 +127,7 @@ window.onload = function () {
   function getStates() {
     fetch("http://localhost:3000/getStates")
       .then(function (response) {
-        console.log("response in getStates", response);
+       
         if (response.ok) {
           return response.json();
         }
@@ -165,7 +159,6 @@ window.onload = function () {
   }
 
   function formatDate(date) {
-    console.log("🚀 ~ formatDate ~ formatDate:", formatDate)
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
     const day = String(date.getDate()).padStart(2, "0");
@@ -180,18 +173,16 @@ window.onload = function () {
   
     // Get the button element by its id
     var myButton = document.getElementById("myButton");
-    console.log("🚀 ~ myButton:", myButton)
   
     // Add event listener for button click
     myButton.addEventListener("click", submitForm);
   
-    console.log('Button:', myButton);
+   
   });
 
   // This is where the magic happens
   function submitForm(employee) {
-    console.log("Gn2");
-     let updatedEmployeeObj = {
+    let updatedEmployeeObj = {
       firstName: document.getElementById("firstName").value,
       lastName: document.getElementById("lastName").value,
       gender: document.getElementById("genders").value,
@@ -203,18 +194,9 @@ window.onload = function () {
       dob: document.getElementById("dob").value,
       phone_number: document.getElementById("phone").value,
       UUID: employeeID,
-    };
-     console.log("🚀 ~ submitForm ~ updatedEmployeeObj:", updatedEmployeeObj)
+    }
+    
 
-   // Convert written gender to numerical key
-  const genderMap = {
-    'Male': 1,
-    'Female': 2,
-    'Other': 3
-  };
-updatedEmployeeObj.gender = genderMap[updatedEmployeeObj.gender];
-
-// Send the request to the server
 fetch("http://localhost:3000/updateEmployee", {
   method: "POST",
   headers: {
@@ -239,17 +221,16 @@ fetch("http://localhost:3000/updateEmployee", {
   console.log(error);
   alert("something went wrong");
 });
+ }
+
 
     
  
   
-  function getGenderString(genderID) {
-    console.log("gender id", genderID);
-    console.log("updateEmployee", updateEmployeeGender);
+  function getGenderString(GenderID) {
     let genderString;
     for (let i = 0; i < updateEmployeeGender.length; i++) {
-      console.log(updateEmployeeGender[i]);
-      if (updateEmployeeGender[i].id === genderID) {
+      if (updateEmployeeGender[i].id === GenderID) {
         genderString = updateEmployeeGender[i].gender;
         break;
       }
@@ -258,10 +239,8 @@ fetch("http://localhost:3000/updateEmployee", {
   }
 
   function getStateID(stateid) {
-    console.log("updateEmployeeState", updateEmployeeState);
     let stateName;
     for (let i = 0; i < updateEmployeeState.length; i++) {
-      console.log(updateEmployeeState[i]);
       if (updateEmployeeState[i].id === stateid) {
         stateName = updateEmployeeState[i].states;
         break;
@@ -273,7 +252,6 @@ fetch("http://localhost:3000/updateEmployee", {
   function getCountryID(countryid) {
     let countryName;
     for (let i = 0; i < updateEmployeeCountry.length; i++) {
-      console.log(updateEmployeeCountry[i]);
       if (updateEmployeeCountry[i].id === countryid) {
         countryName = updateEmployeeCountry[i].label;
         break;
@@ -285,7 +263,6 @@ fetch("http://localhost:3000/updateEmployee", {
  
 
   function deleteEmployee() {
-    console.log("G2N", employeeID);
     fetch("http://localhost:3000/deleteButton", {
       method: "POST",
       headers: {
@@ -312,5 +289,5 @@ fetch("http://localhost:3000/updateEmployee", {
       });
   }
 
-};
+
   

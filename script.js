@@ -37,7 +37,6 @@ newEmployeeForm.addEventListener('submit',function(event){
   let newEmployeeState = document.getElementById('state').value; 
   let newEmployeeZip = document.getElementById('employeeZipInput').value; 
   let newEmployeePhone = document.getElementById('employeePhoneInput').value; 
-  console.log('employeeGender' , newEmployeeGender);
   
     const employeeObject =  {
       firstName: firstName,
@@ -69,7 +68,6 @@ newEmployeeForm.addEventListener('submit',function(event){
       throw new Error('Network response was not ok.');
     })
     .then(function(data){
-      console.log('data',data);
       if (data.success) {
         alert(data.message);
         window.location.reload();
@@ -105,14 +103,12 @@ window.onload = function () {
 function getGenders() {
   return fetch('http://localhost:3000/getGenders')
       .then(function(response){
-          console.log('response in getGenders of script.js', response)
           if(response.ok){
               return response.json();
           }
           throw new Error('Network response was not ok.');
       })
       .then(function(data){
-          console.log('genders',data.genders);
           genders = data.genders;
           let genderSelect = document.getElementById('genders');
           for (let i = 0; i < genders.length; i++) {
@@ -129,7 +125,6 @@ function getGenders() {
 function getStates() {
   fetch("http://localhost:3000/getStates")
     .then(function (response) {
-      console.log("response in getStates", response);
       if (response.ok) {
         return response.json();
       }
@@ -161,10 +156,8 @@ function getStates() {
 }
 
 function getStateID(stateid) {
-  console.log("updateEmployeeState", updateEmployeeState);
   let stateName;
   for (let i = 0; i < updateEmployeeState.length; i++) {
-    console.log(updateEmployeeState[i]);
     if (updateEmployeeState[i].id === stateid) {
       stateName = updateEmployeeState[i].states;
       break;
@@ -183,11 +176,6 @@ function getCountries() {
     })
     .then(function (data) {
       updateEmployeeCountry = data.countries;
-      console.log(
-        "🚀 ~ .then ~ updateEmployeeCountry:",
-        updateEmployeeCountry
-      );
-     
       let countrySelect = document.getElementById("country");
       for (let i = 0; i < updateEmployeeCountry.length; i++) {
         let option = new Option(
@@ -206,7 +194,6 @@ function getCountries() {
 function getCountryID(countryid) {
   let countryName;
   for (let i = 0; i < updateEmployeeCountry.length; i++) {
-    console.log(updateEmployeeCountry[i]);
     if (updateEmployeeCountry[i].id === countryid) {
       countryName = updateEmployeeCountry[i].label;
       break;
@@ -296,10 +283,8 @@ function getAge(dob){
  }
 
  function getGenderString(genderID) {
-  console.log('genderArray',genders)
   let genderString;
   for (let i = 0; i < genders.length; i++) {
-    console.log(genders[i]); 
     if (genders[i].id===genderID) {
       genderString = genders[i].gender;
       break
@@ -309,7 +294,6 @@ function getAge(dob){
  }
 // use the above code as a template for setEmployeeDataOnElements to handle the genders.
 function getEmployeeofTheMonth(randomEmployee) {
-  console.log('rando',randomEmployee);
   let employeeName = document.getElementById('employeeName');
   employeeName.innerText = `${randomEmployee.FirstName} ${randomEmployee.LastName}`;
   let employeeAge = document.getElementById('employeeAge')
@@ -340,14 +324,12 @@ function maleToFemaleRatio(employee) {
   // Loop through allEmployees; it's an array
   // For each iteration, you will find a gender
   // Need three variables: male, female, and other count
-  console.log('maleToFemale', employee[0]);
   let femaleCount = 0;
   let maleCount = 0;
   let otherCount = 0;
 
   for (let i = 0; i < employee.length; i++) {
     const element = employee[i];
-    console.log('element', element);
 
     // Check the gender and update counts accordingly
     if (element.GenderID === 1) {
@@ -360,7 +342,6 @@ function maleToFemaleRatio(employee) {
     }
   }
 
-  console.log('totalMaleFemaleOther', maleCount, femaleCount, otherCount);
   let ratio = document.getElementById('maleToFemaleRatio');
   ratio.innerText = `${maleCount} / ${femaleCount} / ${otherCount}`;
 }

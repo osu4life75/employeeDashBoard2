@@ -6,6 +6,7 @@ import {config} from 'dotenv';
 config();
 
 
+
 //Middleware 
 const app = express(); 
 // Enable CORS
@@ -28,7 +29,6 @@ const pool = mysql.createPool({
 app.get('/getGenders', async (req, res) => {
   const result = await pool.query("select * from gender");
   const rows = result[0];
-  console.log('genderRows',rows);
   res.json({genders: rows})
 
 });
@@ -37,7 +37,6 @@ app.get('/getGenders', async (req, res) => {
 app.get('/getStates', async (req, res) => {
   const result = await pool.query("select * from states");
   const rows = result[0];
-  console.log('state rows',rows);
   res.json({states: rows})
 
 });
@@ -45,7 +44,6 @@ app.get('/getStates', async (req, res) => {
 app.get('/getCountries', async (req, res) => {
   const result = await pool.query("select * from countries");
   const rows = result[0];
-  console.log('country rows',rows);
   res.json({countries: rows})
 
 });
@@ -53,7 +51,6 @@ app.get('/getCountries', async (req, res) => {
  app.get('/getAllEmployees', async (req, res) => {
         const result = await pool.query("select * from employee");
         const rows = result[0];
-        // console.log('employeeRows',rows);
         res.json({employees: rows})
         
      
@@ -62,17 +59,14 @@ app.get('/getCountries', async (req, res) => {
 app.get('/getCompanyInfo', async (req, res) => {
   const result= await pool.query('select * from companyinfo');
   const rows = result[0];
-    // console.log('companyInfo Rows',rows);
     res.json({companyInfo: rows});
 }); 
 
 app.post('/addEmployee', async (req, res) => {
-  console.log('req', req.body);
 
   // Create a new variable for the employee object
-  // const employeeObject = req.body;
+  const employeeObject = req.body;
   let UUID = generateRandomAlphaNumeric()
-  // console.log('generate',UUID)
 
   const mySqlTableEmployee = {
     FirstName: req.body.firstName,
@@ -110,25 +104,19 @@ app.post('/addEmployee', async (req, res) => {
 });
 
 app.post('/getSpecificEmployee', async (req, res) => {
-  // console.log('specificEmployee',req.body)
   const result = await pool.query('select * from employee where UUID = ?', [req.body.UUID]);
+  console.log("🚀 ~ app.post ~ result:", result)
   const rows = result[0];
-  // console.log('rows', rows)
+  console.log("🚀 ~ app.post ~ rows:", rows)
   res.json({employeeObj: rows[0]})
 })
 
 app.post('/updateEmployee', async (req, res) => {
   try {
-    const genderMap = {
-      'Male': 1,
-      'Female': 2,
-      'Other': 3
-    };
-
-    const genderKey = genderMap[req.body.gender];
+   
 
     // Update the employee record with the converted gender key
-    let result = await pool.query(`UPDATE employee SET Gender = ? WHERE UUID = ?`, [genderKey, req.body.UUID]);
+    let result = await pool.query(`UPDATE employee SET GenderID = ? WHERE UUID = ?`, [req.body.UUID]);
 
     // Check if the query was successful (affectedRows > 0)
     if (result.affectedRows > 0) {
@@ -160,11 +148,9 @@ const generateRandomAlphaNumeric = (length=10) => {
 }
 
 app.post('/deleteButton', async (req, res) => {
-  // console.log('req.body in deleteButton', req.body)
   try {
     //create UUID for new entries
-    let result = await pool.query(`Delete from employee WHERE UUID = ?`, [req.body.employeeID])
-    // console.log('result',result)
+    let result = await pool.query(`Delete from employee WHERE UUID = ?`, [req.body.UUID])
     result = result[0];
     // Check if the query was successful (affectedRows > 0)
     if (result.affectedRows > 0) {
