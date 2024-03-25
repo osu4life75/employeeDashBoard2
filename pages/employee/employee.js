@@ -4,6 +4,7 @@ var updateEmployeeState;
 var updateEmployeeCountry;
 var GenderID;
 
+
 function getEmployeeData(uuid) {
  fetch("http://localhost:3000/getSpecificEmployee", {
     method: "POST",
@@ -49,15 +50,23 @@ function getGenders() {
         genderSelect.add(option);
       }
     })
+    .then(function (){
+      //get id from query params and pass to getEOMData()
+      const urlParams = new URLSearchParams(window.location.search);
+      employeeID = urlParams.get("id");
+      
+      getEmployeeData(employeeID);
+    })
     .catch(function (error) {
       console.log(error);
       alert("failed to load genders");
-    });
+    })
+    
 }
 
 function setEmployeeDataOnElements(employee) {
   console.log("🚀 ~ setEmployeeDataOnElements ~ employee:", employee)
-  document.getElementById("genders").value = 3;
+  document.getElementById("genders").value = employee.GenderID;
   document.getElementById("picture").src = `${employee.Picture}`;
   document.getElementById("firstName").value = `${employee.FirstName}`;
   document.getElementById("lastName").value = `${employee.LastName}`;
@@ -81,13 +90,8 @@ window.onload = function () {
   console.log("employee.js Window is finshied loading!");
   getStates();
   getGenders();
-
-  //get id from query params and pass to getEOMData()
-  const urlParams = new URLSearchParams(window.location.search);
-  employeeID = urlParams.get("id");
-  
-  getEmployeeData(employeeID);
-};
+  getCountries();
+ };
   
    function getCountries() {
     fetch("http://localhost:3000/getCountries")
@@ -122,7 +126,7 @@ window.onload = function () {
 
   });
 
-  getCountries();
+
 
   function getStates() {
     fetch("http://localhost:3000/getStates")
@@ -151,6 +155,7 @@ window.onload = function () {
           );
           stateSelect.add(option);
         }
+        
       })
       .catch(function (error) {
         console.log(error);
@@ -231,7 +236,7 @@ fetch("http://localhost:3000/updateEmployee", {
     let genderString;
     for (let i = 0; i < updateEmployeeGender.length; i++) {
       if (updateEmployeeGender[i].id === GenderID) {
-        genderString = updateEmployeeGender[i].gender;
+        genderString = updateEmployeeGender[i].GenderID;
         break;
       }
     }
