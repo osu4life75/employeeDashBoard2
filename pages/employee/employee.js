@@ -5,6 +5,7 @@ var updateEmployeeCountry;
 var GenderID;
 
 
+
 function getEmployeeData(uuid) {
  fetch("http://localhost:3000/getSpecificEmployee", {
     method: "POST",
@@ -27,6 +28,7 @@ function getEmployeeData(uuid) {
       console.log(error);
       alert("something went wrong in getSpecificEmployee");
     });
+   
 }
 
 
@@ -40,7 +42,6 @@ function getGenders() {
     })
     .then(function (data) {
       updateEmployeeGender = data.genders;
-      console.log("🚀 ~ updateEmployeeGender:", updateEmployeeGender)
       let genderSelect = document.getElementById("genders");
       for (let i = 0; i < updateEmployeeGender.length; i++) {
         var option = new Option(
@@ -65,7 +66,6 @@ function getGenders() {
 }
 
 function setEmployeeDataOnElements(employee) {
-  console.log("🚀 ~ setEmployeeDataOnElements ~ employee:", employee)
   document.getElementById("genders").value = employee.GenderID;
   document.getElementById("picture").src = `${employee.Picture}`;
   document.getElementById("firstName").value = `${employee.FirstName}`;
@@ -91,9 +91,11 @@ window.onload = function () {
   getStates();
   getGenders();
   getCountries();
- };
+ 
+};
+
   
-   function getCountries() {
+ function getCountries() {
     fetch("http://localhost:3000/getCountries")
       .then(function (response) {
         if (response.ok) {
@@ -170,129 +172,126 @@ window.onload = function () {
 
     return `${year}-${month}-${day}`;
   };
-
   
 
-  document.addEventListener("DOMContentLoaded", function () {
-    console.log("DOM is fully loaded. Initializing...");
-  
-    // Get the button element by its id
-    var myButton = document.getElementById("myButton");
-  
-    // Add event listener for button click
-    myButton.addEventListener("click", submitForm);
-  
-   
-  });
-
-  // This is where the magic happens
-  function submitForm(employee) {
+ 
+  function submitForm() {
     let updatedEmployeeObj = {
-      firstName: document.getElementById("firstName").value,
-      lastName: document.getElementById("lastName").value,
-      gender: document.getElementById("genders").value,
-      address: document.getElementById("address").value,
-      city: document.getElementById("city").value,
-      state: document.getElementById("state").value,
-      zip_code: document.getElementById("zip").value,
-      email: document.getElementById("email").value,
-      dob: document.getElementById("dob").value,
-      phone_number: document.getElementById("phone").value,
-      UUID: employeeID,
-    }
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        gender: document.getElementById("genders").value,
+        address: document.getElementById("address").value,
+        city: document.getElementById("city").value,
+        state: document.getElementById("state").value,
+        zip_code: document.getElementById("zip").value,
+        email: document.getElementById("email").value,
+        dob: document.getElementById("dob").value,
+        phone_number: document.getElementById("phone").value,
+        UUID: employeeID, // Assuming employeeID is defined elsewhere
+    };
     
 
-fetch("http://localhost:3000/updateEmployee", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(updatedEmployeeObj),
-})
-.then(function (response) {
-  if (response.ok) {
-    return response.json();
-  }
-  throw new Error("Network response was not ok.");
-})
-.then(function (data) {
-  if (data.success) {
-    alert(data.message);
-  } else {
-    alert(data.message);
-  }
-})
-.catch(function (error) {
-  console.log(error);
-  alert("something went wrong");
-});
- }
-
-
-    
- 
-  
-  function getGenderString(GenderID) {
-    let genderString;
-    for (let i = 0; i < updateEmployeeGender.length; i++) {
-      if (updateEmployeeGender[i].id === GenderID) {
-        genderString = updateEmployeeGender[i].GenderID;
-        break;
-      }
-    }
-    return genderString;
-  }
-
-  function getStateID(stateid) {
-    let stateName;
-    for (let i = 0; i < updateEmployeeState.length; i++) {
-      if (updateEmployeeState[i].id === stateid) {
-        stateName = updateEmployeeState[i].states;
-        break;
-      }
-    }
-    return stateName;
-  }
-
-  function getCountryID(countryid) {
-    let countryName;
-    for (let i = 0; i < updateEmployeeCountry.length; i++) {
-      if (updateEmployeeCountry[i].id === countryid) {
-        countryName = updateEmployeeCountry[i].label;
-        break;
-      }
-    }
-    return countryName;
-  }
-
- 
-
-  function deleteEmployee() {
-    fetch("http://localhost:3000/deleteButton", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ employeeID: employeeID }),
+    fetch("http://localhost:3000/updateEmployee", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedEmployeeObj),
     })
-      .then(function (response) {
+    .then(function (response) {
         if (response.ok) {
-          return response.json();
+            return response.json();
         }
         throw new Error("Network response was not ok.");
-      })
-      .then(function (data) {
+    })
+    .then(function (data) {
         if (data.success) {
-          alert(data.message);
+            alert(data.message);
+            //get id from query params and pass to getEOMData()
+            getEmployeeData(employeeID);
         } else {
-          alert(data.message);
+            alert(data.message);
         }
-      })
-      .catch(function (error) {
+    })
+    .catch(function (error) {
         console.log(error);
-        alert("something went wrong");
-      });
-  }
+        alert("Something went wrong");
+    });
+}
+
+function deleteEmployee() {
+  console.log('employeeID in deleteEmployee()', typeof employeeID)
+  fetch("http://localhost:3000/deleteButton", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({employeeID : employeeID}),
+  })
+  .then(function (response) {      
+      if (response.ok) {
+          return response.json();
+      }
+      throw new Error("Network response was not ok.");
+  })
+  .then(function (data) {
+      if (data.success) {
+          alert(data.message);
+          window.location.href = 'file:///C:/Users/Documents/Github/employeeDashBoard2/index.html'
+      } else {
+          alert(data.message);
+      }
+  })
+  .catch(function (error) {
+      console.log(error);
+      alert("Something went wrong");
+  });
+ 
+}
+
+// C:\Users\Documents\Github\employeeDashBoard2\index.html
+
+//  function getGenderString(GenderID) {
+//     let genderString;
+//     for (let i = 0; i < updateEmployeeGender.length; i++) {
+//       if (updateEmployeeGender[i].id === GenderID) {
+//         genderString = updateEmployeeGender[i].GenderID;
+//         break;
+//       }
+//     }
+//     return genderString;
+//   }
+
+//   function getStateID(stateid) {
+//     let stateName;
+//     for (let i = 0; i < updateEmployeeState.length; i++) {
+//       if (updateEmployeeState[i].id === stateid) {
+//         stateName = updateEmployeeState[i].states;
+//         break;
+//       }
+//     }
+//     return stateName;
+//   }
+
+//   function getCountryID(countryid) {
+//     let countryName;
+//     for (let i = 0; i < updateEmployeeCountry.length; i++) {
+//       if (updateEmployeeCountry[i].id === countryid) {
+//         countryName = updateEmployeeCountry[i].label;
+//         break;
+//       }
+//     }
+//     return countryName;
+//   }
 
 
+
+    
+ 
+  
+ 
+
+ 
+
+ 
   

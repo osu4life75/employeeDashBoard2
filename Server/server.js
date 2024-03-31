@@ -6,8 +6,6 @@ import {config} from 'dotenv';
 config();
 
 
-
-
 //Middleware 
 const app = express(); 
 // Enable CORS
@@ -66,7 +64,7 @@ app.get('/getCompanyInfo', async (req, res) => {
 app.post('/addEmployee', async (req, res) => {
 
   // Create a new variable for the employee object
-  const employeeObject = req.body;
+  // const employeeObject = req.body;
   let UUID = generateRandomAlphaNumeric()
 
   const mySqlTableEmployee = {
@@ -106,21 +104,38 @@ app.post('/addEmployee', async (req, res) => {
 
 app.post('/getSpecificEmployee', async (req, res) => {
   const result = await pool.query('select * from employee where UUID = ?', [req.body.UUID]);
-  console.log("🚀 ~ app.post ~ result:", result)
   const rows = result[0];
-  console.log("🚀 ~ app.post ~ rows:", rows)
   res.json({employeeObj: rows[0]})
 })
 
 app.post('/updateEmployee', async (req, res) => {
   try {
-   
 
-    // Update the employee record with the converted gender key
-    let result = await pool.query(`UPDATE employee SET GenderID = ? WHERE UUID = ?`, [req.body.UUID]);
+    if (!req.body) {
+      return res.status(400).json({ success: false, message: 'Missing updateEmployeeObj in request body' });
+    }
+
+    const { firstName, lastName, gender, address, city, state, zip_code, email, dob, phone_number, UUID } = req.body; // Correct destructuring syntax
+
+    // Update the employee record with the data from updateEmployeeObj
+    let result = await pool.query(`
+      UPDATE employee 
+      SET 
+        FirstName = '${firstName}', 
+        LastName = '${lastName}', 
+        GenderID = '${gender}', 
+        address = '${address}', 
+        City = '${city}', 
+        state = '${state}', 
+        zip_code = '${zip_code}', 
+        Email = '${email}', 
+        DOB = '${dob}', 
+        phone_number = '${phone_number}' 
+      WHERE UUID = '${UUID}'
+    `); // Use proper string interpolation for SQL query placeholders
 
     // Check if the query was successful (affectedRows > 0)
-    if (result.affectedRows > 0) {
+    if (result[0].affectedRows > 0) {
       // Send a success response to the client
       res.json({ success: true, message: 'Employee updated successfully' });
     } else {
@@ -134,8 +149,6 @@ app.post('/updateEmployee', async (req, res) => {
   }
 });
 
-
-
 const generateRandomAlphaNumeric = (length=10) => {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
@@ -148,10 +161,12 @@ const generateRandomAlphaNumeric = (length=10) => {
   return result;
 }
 
+
 app.post('/deleteButton', async (req, res) => {
+  console.log('req.body in /deleteButton', req.body)
   try {
     //create UUID for new entries
-    let result = await pool.query(`Delete from employee WHERE UUID = ?`, [req.body.UUID])
+    let result = await pool.query(`Delete from employee WHERE UUID = ?`, [req.body.employeeID])
     result = result[0];
     // Check if the query was successful (affectedRows > 0)
     if (result.affectedRows > 0) {
