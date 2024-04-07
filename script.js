@@ -1,10 +1,19 @@
 // main.js
 // import getAge from './util/util.js';
+
+
+
+// import { Console, error } from "console";
+// import { response } from "express";
+
 // Your main code
 var genders;
+var countries;
 var updateEmployeeState;
 var updateEmployeeCountry;
 
+
+// Add Employee Moday
 var modal = document.getElementById('addEmployeeModal');
 var openModalButton = document.getElementById('modalButton');
 var closedModalButton = document.getElementById('closeModalButton');
@@ -23,6 +32,7 @@ window.onclick = function(event) {
   }
 }
 
+// Add Employee Form
 let newEmployeeForm = document.getElementById('employeeForm');
 newEmployeeForm.addEventListener('submit',function(event){
   event.preventDefault();
@@ -86,20 +96,20 @@ newEmployeeForm.addEventListener('submit',function(event){
   
 })
 
-
+// Page Load
 window.onload = function () {
   console.log('Window has finished loading.');
   getGenders().then(function() {
-      getAllEmployees();
-      getCompanyInfo();
-      getStates();
-      getCountries();
-
+    getStates();
+    getCountries();
+    getAllEmployees();
+    getCompanyInfo();
+     
      
   });
 };
  
-
+// Gender Drop Down for Add Employee Modal
 function getGenders() {
   return fetch('http://localhost:3000/getGenders')
       .then(function(response){
@@ -122,6 +132,7 @@ function getGenders() {
       });
 }
 
+// State dropdown for Add Employee Modal
 function getStates() {
   fetch("http://localhost:3000/getStates")
     .then(function (response) {
@@ -155,16 +166,6 @@ function getStates() {
     });
 }
 
-function getStateID(stateid) {
-  let stateName;
-  for (let i = 0; i < updateEmployeeState.length; i++) {
-    if (updateEmployeeState[i].id === stateid) {
-      stateName = updateEmployeeState[i].states;
-      break;
-    }
-  }
-  return stateName;
-}
 
 function getCountries() {
   fetch("http://localhost:3000/getCountries")
@@ -175,12 +176,12 @@ function getCountries() {
       throw new Error("Network response was not ok.");
     })
     .then(function (data) {
-      updateEmployeeCountry = data.countries;
+      countries = data.countries;
       let countrySelect = document.getElementById("country");
-      for (let i = 0; i < updateEmployeeCountry.length; i++) {
+      for (let i = 0; i < data.countries.length; i++) {
         let option = new Option(
-          updateEmployeeCountry[i].label,
-          updateEmployeeCountry[i].id
+          data.countries[i].label,
+          data.countries[i].id
         );
         countrySelect.add(option);
       }
@@ -191,19 +192,8 @@ function getCountries() {
     });
 }
 
-function getCountryID(countryid) {
-  let countryName;
-  for (let i = 0; i < updateEmployeeCountry.length; i++) {
-    if (updateEmployeeCountry[i].id === countryid) {
-      countryName = updateEmployeeCountry[i].label;
-      break;
-    }
-  }
-  return countryName;
-}
 
-
-
+// Function for Employee Dropdown and generates random EOM.
 function getAllEmployees() {
     fetch('http://localhost:3000/getAllEmployees')
     .then(function(response){
@@ -215,14 +205,13 @@ function getAllEmployees() {
       .then(function(data){
          employee = data.employees;
         // set up options for employees dropdown
-        // let employeeTable = document.getElementById('employeesDropDown');
+        let employeeDropdown = document.getElementById('employeesDropDown');
+        employeeDropdown.innerHTML = '';
         for (let i = 0; i < employee.length; i++) {
-          var option = new Option(employee[i].employee, employee[i].id);
-          // genderSelect.add(option);
-      }
-
-
-        // get random number for employee of the month
+          var option = new Option(`${employee[i].FirstName} ${employee[i].LastName}`);
+          employeeDropdown.add(option); // Add option to the dropdown
+    }
+       // get random number for employee of the month
        let randomEmployeeIndex = Math.floor(Math.random() * (employee.length));
        let randomeEmployee2 = employee[randomEmployeeIndex];
         getEmployeeofTheMonth(randomeEmployee2);
@@ -235,9 +224,10 @@ function getAllEmployees() {
       .catch(function(error){
         console.log(error);
       })
-    
-    
+     
 };
+
+// Adds info to businessCategory cary
 function getCompanyInfo() {
     fetch('http://localhost:3000/getCompanyInfo')
     .then(function(response){
@@ -292,8 +282,21 @@ function getAge(dob){
   }
   return genderString;
  }
+
+ function getCountryString(countryID) {
+  let countryString;
+  console.log('countries in getCountryString', countries)
+  for (let i = 0; i < countries.length; i++) {
+    if (countries[i].id===countryID) {
+      countryString = countries[i].label;
+      break
+     }
+  }
+  return countryString;
+ }
 // use the above code as a template for setEmployeeDataOnElements to handle the genders.
 function getEmployeeofTheMonth(randomEmployee) {
+  console.log('randomEmployee', randomEmployee)
   let employeeName = document.getElementById('employeeName');
   employeeName.innerText = `${randomEmployee.FirstName} ${randomEmployee.LastName}`;
   let employeeAge = document.getElementById('employeeAge')
@@ -306,12 +309,13 @@ function getEmployeeofTheMonth(randomEmployee) {
   let employeeCity = document.getElementById('employeeCity')
   employeeCity.innerText = `${randomEmployee.City}`;
   let employeeCountry = document.getElementById('employeeCountry')
-  employeeCountry.innerText = `${randomEmployee.Country}`;
+  employeeCountry.innerText = getCountryString(randomEmployee.Country);
   let eomPictures = document.getElementById("eomPicture");
   eomPictures.src = `${randomEmployee.Picture}`;
 
 }
 
+// Keeps count of Employees when Added to Add Employee
 function totalEmployees(employee) {
   const totalNumberOFEmployees = employee.length;
   let totalEmployees=document.getElementById('totalEmployees');
@@ -371,12 +375,10 @@ function setEOMHref(eom) {
 
 }
 
-function employeeDropdownRedirect() {
-  const selectedValue = document.getElementById('employeesDropDown').value;
-  const url = `./pages/employee/employee.html?id=${selectedValue}`
-  // Navigate to the new URL
-  window.location.href = url;
-  
-}
+
+
+
+
+
 
 

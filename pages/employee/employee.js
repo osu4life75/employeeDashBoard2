@@ -92,6 +92,7 @@ window.onload = function () {
   getGenders();
   getCountries();
  
+ 
 };
 
   
@@ -187,8 +188,10 @@ window.onload = function () {
         email: document.getElementById("email").value,
         dob: document.getElementById("dob").value,
         phone_number: document.getElementById("phone").value,
+        country: document.getElementById("country").value,
         UUID: employeeID, // Assuming employeeID is defined elsewhere
     };
+    console.log("🚀 ~ submitForm ~ updatedEmployeeObj:", updatedEmployeeObj)
     
 
     fetch("http://localhost:3000/updateEmployee", {
@@ -249,40 +252,8 @@ function deleteEmployee() {
  
 }
 
-// C:\Users\Documents\Github\employeeDashBoard2\index.html
 
-//  function getGenderString(GenderID) {
-//     let genderString;
-//     for (let i = 0; i < updateEmployeeGender.length; i++) {
-//       if (updateEmployeeGender[i].id === GenderID) {
-//         genderString = updateEmployeeGender[i].GenderID;
-//         break;
-//       }
-//     }
-//     return genderString;
-//   }
 
-//   function getStateID(stateid) {
-//     let stateName;
-//     for (let i = 0; i < updateEmployeeState.length; i++) {
-//       if (updateEmployeeState[i].id === stateid) {
-//         stateName = updateEmployeeState[i].states;
-//         break;
-//       }
-//     }
-//     return stateName;
-//   }
-
-//   function getCountryID(countryid) {
-//     let countryName;
-//     for (let i = 0; i < updateEmployeeCountry.length; i++) {
-//       if (updateEmployeeCountry[i].id === countryid) {
-//         countryName = updateEmployeeCountry[i].label;
-//         break;
-//       }
-//     }
-//     return countryName;
-//   }
 
 
 

@@ -47,12 +47,18 @@ app.get('/getCountries', async (req, res) => {
 
 });
 
- app.get('/getAllEmployees', async (req, res) => {
-        const result = await pool.query("select * from employee");
-        const rows = result[0];
-        res.json({employees: rows})
-        
-     
+ // Define route to fetch all employees
+app.get('/getAllEmployees', async (req, res) => {
+  try {
+    // Execute SQL query to get all employees
+    const result = await pool.query("SELECT * FROM employee");
+    const employees = result[0]; // Extract rows from the result
+    res.json({ employees
+     }); // Send JSON response with employees data
+  } catch (error) {
+    console.error('Error fetching employees:', error);
+    res.status(500).json({ error: 'Internal server error' }); // Handle errors
+  }
 });
  
 app.get('/getCompanyInfo', async (req, res) => {
@@ -115,7 +121,7 @@ app.post('/updateEmployee', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Missing updateEmployeeObj in request body' });
     }
 
-    const { firstName, lastName, gender, address, city, state, zip_code, email, dob, phone_number, UUID } = req.body; // Correct destructuring syntax
+    const { firstName, lastName, gender, address, city, state, zip_code, email, dob, phone_number, country, UUID } = req.body; // Correct destructuring syntax
 
     // Update the employee record with the data from updateEmployeeObj
     let result = await pool.query(`
@@ -130,10 +136,12 @@ app.post('/updateEmployee', async (req, res) => {
         zip_code = '${zip_code}', 
         Email = '${email}', 
         DOB = '${dob}', 
-        phone_number = '${phone_number}' 
+        phone_number = '${phone_number}',
+        Country = '${country}'
       WHERE UUID = '${UUID}'
     `); // Use proper string interpolation for SQL query placeholders
 
+    console.log('result', result)
     // Check if the query was successful (affectedRows > 0)
     if (result[0].affectedRows > 0) {
       // Send a success response to the client
@@ -190,4 +198,6 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+
 

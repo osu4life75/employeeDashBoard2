@@ -1,83 +1,75 @@
-/* body, form {
+/* Reset default margin and padding */
+* {
     margin: 0;
     padding: 0;
-  } */
-
-/* .header{
+    box-sizing: border-box;
+  }
+  
+  /* Body styles */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: black;
+  }
+  
+  /* Form container */
+  .form-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Form header */
+  .header {
+    margin-bottom: 20px;
     text-align: center;
-    margin-top: 150px;
-   
-}
-
-img{
-  width: 200px;
-  height: 250px;
-  margin-left: 0px;
-}
-
-.first-row{
-   margin: 0px;
-   width: fit-content;
-}
-
-#firstName, #lastName{
-   margin: 20px; 
-
-}
-
-.second-row{
-    margin-left: 140px;
+  }
+  
+  /* Form input fields */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select {
+    width: calc(100% - 10px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  input[type="date"] {
     width: 100%;
-}
-
-#gender{
-    width: 15%;
-}
-
-#dob, #phone{
-    margin: 40px;
-}
-
-.third-row{
-   margin-top: 0px;
-   
-   box-sizing: border-box;
-}
-
-#address{
-    width: 93%;
-}
-
-.fourth-row{
-    margin: 50px 50px 50px 0px;
-    width: 100%;
-}
-
-#city,#state,#zip{
-    margin-right: 40px;
-}
-
-.button{
-    margin-top: 50px;
-}
-
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-} */
-
-/* .form-container { */
-    /* width: 90%; */
-    /* padding: 20px; */
-    /* border: 1px solid #ddd; */
-    /* border-radius: 5px; */
-    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
-/* }   */
-
-img{
-    height: 140px;
-    width: 140px;
-}
+  }
+  
+  /* Form button container */
+  .button {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  /* Form buttons */
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  /* Form image */
+  #picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    display: block;
+    margin: 0 auto;
+  }
+  
