@@ -22,7 +22,7 @@ function getEmployeeData(uuid) {
     })
     .then(function (data) {
       console.log("🚀 ~ data:", data)
-      setEmployeeDataOnElements(data.employeeObj);
+      // setEmployeeDataOnElements(data.employeeObj);
     })
     .catch(function (error) {
       console.log(error);
@@ -111,8 +111,8 @@ window.onload = function () {
         let countrySelect = document.getElementById("country");
         for (let i = 0; i < updateEmployeeCountry.length; i++) {
           let option = new Option(
-            updateEmployeeCountry[i].label,
-            updateEmployeeCountry[i].id
+            
+            updateEmployeeCountry[i].country
           );
           countrySelect.add(option);
         }

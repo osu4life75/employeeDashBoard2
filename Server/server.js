@@ -1,29 +1,39 @@
 import express from 'express';
-//import multer from 'multer';
 import cors from 'cors';
 import mysql from 'mysql2/promise';
-import {config} from 'dotenv';
+import { config } from 'dotenv';
+
+
 config();
 
-
-//Middleware 
-const app = express(); 
-// Enable CORS
+// Middleware 
+const app = express();
 app.use(cors());
-
-// Middleware to parse JSON in the request body
 app.use(express.json());
-// Middleware to parse URL-encoded data in the request body
 app.use(express.urlencoded({ extended: true }));
 
-//Database//
+// Database configuration
 const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE,
+  host: process.env.DB_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE,
+  port: process.env.DATABASE_PORT,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
+// Test the database connection
+(async () => {
+  try {
+    const connection = await pool.getConnection();
+    console.log('Connected to MySQL database');
+    connection.release();
+  } catch (error) {
+    console.error('Error connecting to MySQL database:', error);
+  }
+})();
 // Database Routes
 app.get('/getGenders', async (req, res) => {
   const result = await pool.query("select * from gender");
@@ -62,7 +72,7 @@ app.get('/getAllEmployees', async (req, res) => {
 });
  
 app.get('/getCompanyInfo', async (req, res) => {
-  const result= await pool.query('select * from companyinfo');
+  const result= await pool.query('select * from business');
   const rows = result[0];
     res.json({companyInfo: rows});
 }); 
@@ -194,10 +204,9 @@ app.post('/deleteButton', async (req, res) => {
 })
 
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
 
 

@@ -180,7 +180,6 @@ function getCountries() {
       let countrySelect = document.getElementById("country");
       for (let i = 0; i < data.countries.length; i++) {
         let option = new Option(
-          data.countries[i].label,
           data.countries[i].id
         );
         countrySelect.add(option);
@@ -242,7 +241,7 @@ function getCompanyInfo() {
         let companyNameElement = document.querySelector('#companyname')
         companyNameElement.innerText = name;
         let businessCategory = document.getElementById("businessCategory")
-        businessCategory.innerText = companyInfoArray[0].businessCategory;
+        businessCategory.innerText = companyInfoArray[0].category;
         let businessAdress = document.getElementById("businessAdress")
         businessAdress.innerText = `${companyInfoArray[0].address} ${companyInfoArray[0].city} ${companyInfoArray[0].state}, ${companyInfoArray[0].country}`;
         })
@@ -285,10 +284,9 @@ function getAge(dob){
 
  function getCountryString(countryID) {
   let countryString;
-  console.log('countries in getCountryString', countries)
   for (let i = 0; i < countries.length; i++) {
     if (countries[i].id===countryID) {
-      countryString = countries[i].label;
+      countryString = countries[i].country;
       break
      }
   }
