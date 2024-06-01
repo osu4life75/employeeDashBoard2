@@ -21,9 +21,10 @@ function getEmployeeData(uuid) {
       throw new Error("Network response was not ok.");
     })
     .then(function (data) {
-      console.log("🚀 ~ data:", data)
-      // setEmployeeDataOnElements(data.employeeObj);
+      setEmployeeDataOnElements(data.employeeObj);
+      
     })
+      
     .catch(function (error) {
       console.log(error);
       alert("something went wrong in getSpecificEmployee");
@@ -41,6 +42,7 @@ function getGenders() {
       throw new Error("Network response was not ok.");
     })
     .then(function (data) {
+      console.log("🚀 ~ data:", data)
       updateEmployeeGender = data.genders;
       let genderSelect = document.getElementById("genders");
       for (let i = 0; i < updateEmployeeGender.length; i++) {
@@ -71,13 +73,13 @@ function setEmployeeDataOnElements(employee) {
   document.getElementById("firstName").value = `${employee.FirstName}`;
   document.getElementById("lastName").value = `${employee.LastName}`;
   document.getElementById("email").value = `${employee.Email}`;
-  document.getElementById("address").value = `${employee.address}`;
+  document.getElementById("address").value = `${employee.Address}`;
   document.getElementById("city").value = `${employee.City}`;
-  document.getElementById("state").value = employee.state;
-  document.getElementById("zip").value = `${employee.zip_code}`;
+  document.getElementById("state").value = employee.State;
+  document.getElementById("zip").value = `${employee.Zipcode}`;
   document.getElementById("country").value = employee.Country;
   document.getElementById("dob").value = `${formatDate(new Date(employee.DOB))}`;
-  document.getElementById("phone").value = `${employee.phone_number}`;
+  document.getElementById("phone").value = `${employee.Phone_Number}`;
   
 
 
@@ -112,7 +114,8 @@ window.onload = function () {
         for (let i = 0; i < updateEmployeeCountry.length; i++) {
           let option = new Option(
             
-            updateEmployeeCountry[i].country
+            updateEmployeeCountry[i].country, updateEmployeeCountry[i].id
+            
           );
           countrySelect.add(option);
         }
@@ -178,17 +181,17 @@ window.onload = function () {
  
   function submitForm() {
     let updatedEmployeeObj = {
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
-        gender: document.getElementById("genders").value,
-        address: document.getElementById("address").value,
-        city: document.getElementById("city").value,
-        state: document.getElementById("state").value,
-        zip_code: document.getElementById("zip").value,
-        email: document.getElementById("email").value,
-        dob: document.getElementById("dob").value,
-        phone_number: document.getElementById("phone").value,
-        country: document.getElementById("country").value,
+        FirstName: document.getElementById("firstName").value,
+        LastName: document.getElementById("lastName").value,
+        GenderID: document.getElementById("genders").value,
+        Address: document.getElementById("address").value,
+        City: document.getElementById("city").value,
+        State: document.getElementById("state").value,
+        Zipcode: document.getElementById("zip").value,
+        Email: document.getElementById("email").value,
+        DOB: document.getElementById("dob").value,
+        Phone_Number: document.getElementById("phone").value,
+        Country: document.getElementById("country").value,
         UUID: employeeID, // Assuming employeeID is defined elsewhere
     };
     console.log("🚀 ~ submitForm ~ updatedEmployeeObj:", updatedEmployeeObj)
@@ -240,7 +243,7 @@ function deleteEmployee() {
   .then(function (data) {
       if (data.success) {
           alert(data.message);
-          window.location.href = 'file:///C:/Users/Documents/Github/employeeDashBoard2/index.html'
+          window.location.href = 'file:///Users/georgelynch/Documents/GitHub/employeeDashBoard2/index.html'
       } else {
           alert(data.message);
       }

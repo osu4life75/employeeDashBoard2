@@ -91,10 +91,10 @@ app.post('/addEmployee', async (req, res) => {
     City: req.body.newEmployeeCity,
     Country: req.body.newEmployeeCountry,
     DOB: req.body.newEmployeeDOB,
-    address: req.body.newEmployeeAddress,
-    state: req.body.newEmployeeState,
-    zip_code: req.body.newEmployeeZip,
-    phone_number: req.body.newEmployeePhone,
+    Address: req.body.newEmployeeAddress,
+    State: req.body.newEmployeeState,
+    Zipcode: req.body.newEmployeeZip,
+    Phone_Number: req.body.newEmployeePhone,
     UUID: UUID
   };
 
@@ -131,7 +131,7 @@ app.post('/updateEmployee', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Missing updateEmployeeObj in request body' });
     }
 
-    const { firstName, lastName, gender, address, city, state, zip_code, email, dob, phone_number, country, UUID } = req.body; // Correct destructuring syntax
+    const {firstName, lastName, gender, address, city, state, zip_code, email, dob, phone_number, country, UUID } = req.body; // Correct destructuring syntax
 
     // Update the employee record with the data from updateEmployeeObj
     let result = await pool.query(`
@@ -140,13 +140,13 @@ app.post('/updateEmployee', async (req, res) => {
         FirstName = '${firstName}', 
         LastName = '${lastName}', 
         GenderID = '${gender}', 
-        address = '${address}', 
+        Address = '${address}', 
         City = '${city}', 
-        state = '${state}', 
-        zip_code = '${zip_code}', 
+        State = '${state}', 
+        Zipcode = '${zip_code}', 
         Email = '${email}', 
         DOB = '${dob}', 
-        phone_number = '${phone_number}',
+        Phone_Number = '${phone_number}',
         Country = '${country}'
       WHERE UUID = '${UUID}'
     `); // Use proper string interpolation for SQL query placeholders

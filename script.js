@@ -13,7 +13,7 @@ var updateEmployeeState;
 var updateEmployeeCountry;
 
 
-// Add Employee Moday
+// Add Employee Modal
 var modal = document.getElementById('addEmployeeModal');
 var openModalButton = document.getElementById('modalButton');
 var closedModalButton = document.getElementById('closeModalButton');
@@ -101,7 +101,7 @@ window.onload = function () {
   console.log('Window has finished loading.');
   getGenders().then(function() {
     getStates();
-    getCountries();
+    // getCountries();
     getAllEmployees();
     getCompanyInfo();
      
@@ -180,7 +180,7 @@ function getCountries() {
       let countrySelect = document.getElementById("country");
       for (let i = 0; i < data.countries.length; i++) {
         let option = new Option(
-          data.countries[i].id
+          data.countries[i].country, data.countries[i].id
         );
         countrySelect.add(option);
       }
@@ -320,6 +320,8 @@ function totalEmployees(employee) {
   totalEmployees.innerText = `${employee.length}`;
 }
 
+getCountries();
+
 
 
 function maleToFemaleRatio(employee) {
@@ -355,7 +357,7 @@ function percLiveInUS(allEmployees) {
   let usResident = 0;
   for (let i = 0; i < employee.length; i++) {
     const element = employee[i];
-    if(element.Country === 'USA'){
+    if(element.Country === 186){
       usResident = usResident +1;
     
     }
